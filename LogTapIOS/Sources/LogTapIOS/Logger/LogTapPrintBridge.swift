@@ -116,11 +116,29 @@ public final class LogTapPrintBridge {
         }
     }
 
+
+    /// Echo captured bytes back to the original stdout/stderr so Xcode console still shows them.
+    private func writeToFD(_ fd: Int32, data: Data) {
+        guard fd >= 0, !data.isEmpty else { return }
+        data.withUnsafeBytes { rawBuf in
+            var p = rawBuf.bindMemory(to: UInt8.self).baseAddress!
+            var remaining = data.count
+            while remaining > 0 {
+                let written = Darwin.write(fd, p, remaining)
+                if written <= 0 { break }
+                remaining -= written
+                p += written
+            }
+        }
+    }
+
     // MARK: - Internals
 
     private func consume(handle: FileHandle, isStdErr: Bool) {
         let data = handle.availableData
         if data.isEmpty { return } // pipe closed
+        // Tee back to original file descriptors so logs remain visible in Xcode console
+        if isStdErr { writeToFD(errOrig, data: data) } else { writeToFD(outOrig, data: data) }
         q.async {
             if isStdErr { self.errBuffer.append(data) } else { self.outBuffer.append(data) }
             self.drain(isStdErr: isStdErr)
