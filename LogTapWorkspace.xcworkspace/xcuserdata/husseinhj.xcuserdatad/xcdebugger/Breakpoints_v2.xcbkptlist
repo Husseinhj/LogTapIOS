@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "8434B92A-46C0-4FF4-8DC2-B2FE951AAB5E"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8C65C43B-30BA-4C63-97A7-E1840FBAC37A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LogTapIOS/Sources/LogTapIOS/LogTap.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "start(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "29799F07-807C-47F9-8C13-ECADDEA0BF93"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LogTapIOS/Sources/LogTapIOS/LogTap.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "start(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ED6EFA50-2B04-4469-8392-82C962254145"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LogTapIOS/Sources/LogTapIOS/LogTap.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "start(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "00B74FA3-BD5C-4119-89E6-21CD65A74D2A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LogTapIOS/Sources/LogTapIOS/LogTap.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "start(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "487BEFAC-692D-4746-AA07-6E4414BDC478"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "LogTapIOS/Sources/LogTapIOS/Logger/LogTapPrintBridge.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "logtapPrint(_:separator:terminator:level:fileID:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "487BEFAC-692D-4746-AA07-6E4414BDC478 - 90f8eba4dc4be254"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "LogTapIOS.logtapPrint(_: Any..., separator: Swift.String, terminator: Swift.String, level: LogTapIOS.LogLevel, fileID: Swift.String) -&gt; ()"
+                  moduleName = "LogTapIOS-Sample.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/husseinhj/Documents/projects/LogTapIOS/LogTapIOS/Sources/LogTapIOS/Logger/LogTapPrintBridge.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "208"
+                  endingLineNumber = "208">
+               </Location>
+               <Location
+                  uuid = "487BEFAC-692D-4746-AA07-6E4414BDC478 - 1e06fd29f58625bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Any) -&gt; Swift.String in LogTapIOS.logtapPrint(_: Any..., separator: Swift.String, terminator: Swift.String, level: LogTapIOS.LogLevel, fileID: Swift.String) -&gt; ()"
+                  moduleName = "LogTapIOS-Sample.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/husseinhj/Documents/projects/LogTapIOS/LogTapIOS/Sources/LogTapIOS/Logger/LogTapPrintBridge.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "208"
+                  endingLineNumber = "208">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
