@@ -1018,7 +1018,10 @@ pre.level-ASSERT  { color: var(--lv-a); }
 /* Modes */
 body.mode-network .col-tag{display:none}
 body.mode-log .col-method,body.mode-log .col-status,body.mode-log .col-actions{display:none}
-body.mode-log .col-url .url{display:none}
+/* In log mode, hide network URL line but keep logger message */
+body.mode-log tr:not(.level-VERBOSE):not(.level-DEBUG):not(.level-INFO):not(.level-WARN):not(.level-ERROR):not(.level-ASSERT) .col-url .url{display:none}
+/* Ensure logger message (lc) remains visible */
+body.mode-log .col-url .lc{display:block}
 
 /* Helpers */
 .muted{color:var(--muted)} .badge{border:1px solid var(--line);border-radius:6px;padding:2px 6px;background:transparent;font:12px ui-monospace,Menlo,monospace}
@@ -1326,6 +1329,13 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
             if(tag) msg = msg.replace(new RegExp('^\\s*'+tag.replace(/[.*+?^$}()|[\\]\\\\]/g,'\\$&')+'\\s*:?\\s*'),'');
           }catch{}
           return msg.trim();
+       }
+       function logMessage(ev){
+         // Prefer a cleaned log line. Fallback to message/body/summary if present.
+         const cleaned = logcatLine(ev);
+         if (cleaned && cleaned.trim() !== '') return cleaned;
+         const raw = ev && (ev.message || ev.bodyPreview || ev.summary);
+         return raw ? String(raw) : '';
        }
 
        function applyMode(){
@@ -1713,8 +1723,21 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
           if (sumEl){
             sumEl.classList.remove('json','method-GET','method-POST','method-PUT','method-PATCH','method-DELETE','method-WS','ws-send','ws-recv','ws-ping','ws-pong','ws-close','level-VERBOSE','level-DEBUG','level-INFO','level-WARN','level-ERROR','level-ASSERT');
             // content
-            if (jsonPretty?.checked){ sumEl.classList.add('json'); sumEl.innerHTML = hlJson(ev.summary ?? ''); }
-            else { sumEl.textContent = ev.summary ?? ''; }
+            let content;
+            if (kind === 'LOG') {
+              content = logMessage(ev); // make sure logs show their message
+              sumEl.classList.remove('json');
+              sumEl.textContent = content || '';
+            } else {
+              content = ev.summary ?? '';
+              if (jsonPretty?.checked){
+                sumEl.classList.add('json');
+                sumEl.innerHTML = hlJson(content);
+              } else {
+                sumEl.classList.remove('json');
+                sumEl.textContent = content;
+              }
+            }
             // method/WS tint
             if (kind==='HTTP'){
               if (mU) sumEl.classList.add('method-'+mU);
