@@ -76,13 +76,15 @@ struct MyApp: App {
           cfg.capacity = 5000
           cfg.enableOnRelease = false
           LogTap.shared.start(cfg)
-      
-          let sink = LogTapSinkAdapter()
-          LogTapPrintBridge.shared.start(sink: sink)
     
+          // Configure LogTapLogger and only use logD, logI, logW, logE in your app
           LogTapLogger.shared.debugMode = true
           LogTapLogger.shared.allowReleaseLogging = false
           LogTapLogger.shared.minLevel = .verbose
+
+          // Optional: Logger bridge to capture print()
+          let sink = LogTapSinkAdapter()
+          LogTapPrintBridge.shared.start(sink: sink)
         #else
           LogTapLogger.shared.debugMode = false
           LogTapLogger.shared.allowReleaseLogging = false
