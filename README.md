@@ -1,6 +1,6 @@
-# 📡 LogTapIOS
+# LogTapIOS
 
-Inspect **HTTP(S)**, **WebSocket**, and **Logger** events from your iOS, iPadOS, and macOS apps in real time — through an embedded **web UI** running directly on your device.
+> Inspect **HTTP(S)**, **WebSocket**, and **Logger** events from your iOS, iPadOS, and macOS apps in real time — through an embedded **web UI** running directly on your device.
 
 ---
 
