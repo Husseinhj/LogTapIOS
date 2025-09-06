@@ -29,7 +29,6 @@ public final class LogTap {
         self.config = cfg
         self.store = LogTapStore(capacity: cfg.capacity)
         
-        print("----->>>>> start called <<<<<-----")
         // Router closure: serve UI, API, and WS
         let router: (HTTPRequestHead, ByteBuffer?) -> (status: HTTPResponseStatus, headers: HTTPHeaders, body: ByteBuffer?, upgradeToWebSocket: Bool) = { head, body in
             let path = URLComponents(string: head.uri)?.path ?? head.uri
