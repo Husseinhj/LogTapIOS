@@ -80,7 +80,7 @@ private enum API {
 private enum Samples {
     static let loginBody: [String: Any] = ["username": "mor_2314", "password": "83r5^"]
     static let userPatch: [String: Any] = ["name": "John", "role": "tester"]
-    static let wsEchoURL = URL(string: "wss://echo.websocket.events")!
+    static let wsEchoURL = URL(string: "wss://echo.websocket.org")!
     static let wsMessage = "{\"hello\":\"world\",\"platform\":\"iOS\"}"
 }
 

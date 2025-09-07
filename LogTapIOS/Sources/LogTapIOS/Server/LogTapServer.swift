@@ -96,7 +96,16 @@ final class LogTapServer {
         }
 
         func channelRead(context: ChannelHandlerContext, data: NIOAny) {
-            switch unwrapInboundIn(data) {
+            if (data is ByteBuffer) {
+                return
+            }
+            
+            if (data.description.starts(with: "ByteBuffer:")) {
+                // Temporary fix: when the server is already running, reloading the webpage raises an exception
+                return
+            }
+            
+            switch self.unwrapInboundIn(data) {
             case .head(let reqHead):
                 head = reqHead
                 bodyBuffer = context.channel.allocator.buffer(capacity: 0)
