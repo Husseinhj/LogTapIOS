@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.0] - 2025-09-07
+### 0.2.0 - 2025-09-07
+Refactor UI and functionality
+
+- Update repository URL from LogTap to LogTapIOS.
+- Implement resizable and persistable table columns.
+- Change default for "Pretty JSON" to enabled.
+- Default "Actions" column to hidden.
+- Improve log message display and parsing.
+- Minor style adjustments for table padding and layout.
+
+## 0.1.0 - 2025-09-07
 ### Added
 - Initial release of **LogTap** for iOS/macOS/iPadOS.
 - Core **LogTapServer** implementation with embedded SwiftNIO server.
