@@ -514,7 +514,8 @@ body.hide-col-actions #logtbl .col-actions{display:none}
 .repo .gh-ico{width:16px;height:16px;vertical-align:middle;margin-right:4px;fill:currentColor}
 
 /* ========================= Data Table (M3) ========================= */
-.tbl{width:100%;border-collapse:separate;border-spacing:0}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
+/* Table header sticky row */
 .tbl thead th {
   position: sticky;
   top: 0;
@@ -529,6 +530,108 @@ body.hide-col-actions #logtbl .col-actions{display:none}
   z-index: 2;
   text-transform: uppercase;
 }
+/* Column resize handle */
+.tbl thead th{ position: sticky; /* keep existing */ }
+.tbl thead th{ position: sticky; } /* ensure stickiness remains */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+/* make header cell itself relatively positioned for handle */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+/* real rules */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+/* actual handle UI */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+/* final */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+/* concise actual handle rules */
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+.tbl thead th{ position: sticky; }
+
+/* real handle */
+.tbl thead th{ position: sticky; }
+  .th-resizer{
+    position:absolute;
+    top:0; right:-5px; bottom:0;
+    width:10px; /* wider hit area */
+    cursor:col-resize;
+    z-index:5;
+  }
+  /* always-visible divider line */
+  .th-resizer::after{
+    content:"";
+    position:absolute; top:8px; bottom:8px; left:4px; width:2px;
+    background: color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
+    transition: background .15s, left .15s, width .15s;
+  }
+  /* subtle grabber dots */
+  .th-resizer::before{
+    content:"";
+    position:absolute; top:50%; left:3px; width:4px; height:14px;
+    transform: translateY(-50%);
+    background:
+      radial-gradient(currentColor 2px, transparent 3px) 0 2px/4px 6px repeat-y;
+    color: color-mix(in srgb, var(--md-sys-color-outline-variant) 65%, transparent);
+    opacity:.7;
+    pointer-events:none;
+  }
+  /* hover/active emphasis */
+  .tbl thead th:hover .th-resizer::after,
+  .th-resizer:hover::after,
+  body.th-resizing .th-resizer::after{
+    background: color-mix(in srgb, var(--md-sys-color-primary) 55%, transparent);
+    left:4px; width:2px;
+  }
+  .th-resizing{ user-select:none !important; cursor:col-resize !important; }
 /* Keep first header cells readable when table scrolls */
 .tbl thead th:first-child{
   position: sticky;
@@ -539,7 +642,7 @@ body.hide-col-actions #logtbl .col-actions{display:none}
 .tbl tbody tr{background:var(--md-sys-color-surface);border-bottom:1px solid var(--line)}
 .tbl tbody tr:hover{background:var(--md-sys-color-surface-container-high)}
 .tbl tbody td{padding:14px 12px;vertical-align:top}
-.col-id{width:72px}.col-time{width:150px}.col-kind{width:120px}.col-tag{width:140px}.col-method{width:92px}.col-status{width:92px}.col-actions{width:170px}
+.col-id{width:var(--col-id-w,72px)}.col-time{width:var(--col-time-w,150px)}.col-kind{width:var(--col-kind-w,120px)}.col-tag{width:var(--col-tag-w,140px)}.col-method{width:var(--col-method-w,92px)}.col-status{width:var(--col-status-w,92px)}.col-actions{width:var(--col-actions-w,170px)}
 
 /* Status & kind colors */
 
@@ -1047,8 +1150,8 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
 .drawer{ border-radius: var(--radius-lg); }
 
 /* Density: table paddings by scheme */
-.tbl thead th{ padding: calc(var(--row-pad) - 2px) 12px; }
-.tbl tbody td{ padding: var(--row-pad) 12px; }
+.tbl thead th{ padding: calc(var(--row-pad) - 4px) 8px; }
+.tbl tbody td{ padding: calc(var(--row-pad) - 6px) 6px; }
 
 /* Buttons compactness varies subtly per scheme */
 .btn{ padding: calc(var(--row-pad) - 6px) 16px; }
@@ -1218,7 +1321,10 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
         function initPrefs(){
           try{
             const v = localStorage.getItem('logtap:jsonPretty');
-            if(jsonPretty && v!==null){ jsonPretty.checked = (v === '1'); }
+            if(jsonPretty){
+              if(v!==null){ jsonPretty.checked = (v === '1'); }
+              else { jsonPretty.checked = true; } // default enabled
+            }
           }catch{}
         }
 
@@ -1230,7 +1336,7 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
         }
         function applyCols(cfg){
           const m = Object.assign({
-            id:true,time:true,kind:true,tag:true,method:true,status:true,url:true,actions:true
+            id:true,time:true,kind:true,tag:true,method:true,status:true,url:true,actions:false
           }, cfg||{});
           // set checkbox states
           if(colId) colId.checked = !!m.id;
@@ -1252,6 +1358,9 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
           bodyEl.classList.toggle('hide-col-actions', !m.actions);
         }
         let colCfg = loadCols();
+        if(Object.keys(colCfg).length===0){
+          colCfg = {id:true,time:true,kind:true,tag:true,method:true,status:true,url:true,actions:false};
+        }
 
         // ---- Utils ----
         function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
@@ -1360,10 +1469,10 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
           if(levelFilter) levelFilter.value='';
           if(viewMode){ viewMode.value='mix'; applyMode(); }
 
-          // Pretty JSON defaults to OFF
+          // Pretty JSON defaults to ON
           if(jsonPretty){
-            jsonPretty.checked = false;
-            try{ localStorage.setItem('logtap:jsonPretty','0'); }catch{}
+            jsonPretty.checked = true;
+            try{ localStorage.setItem('logtap:jsonPretty','1'); }catch{}
           }
 
           // Columns: show all
@@ -1373,6 +1482,111 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
 
           // Clear active stat chip highlight
           highlightChip(null);
+          // Reset column widths to defaults
+          resetColWidths();
+        }
+        // ==== Column Resize (persisted) ====
+        const COL_W_KEY = 'logtap:colW';
+        const rootStyle = document.documentElement.style;
+        const headerRow = document.querySelector('#logtbl thead tr');
+
+        function loadColWidths(){
+          try{ return JSON.parse(localStorage.getItem(COL_W_KEY)||'{}'); }catch{ return {}; }
+        }
+        function saveColWidths(map){
+          try{ localStorage.setItem(COL_W_KEY, JSON.stringify(map||{})); }catch{}
+        }
+        function applyColWidths(map){
+          if(!map) return;
+          for(const [k,v] of Object.entries(map)){
+            if(typeof v === 'number' || (typeof v === 'string' && v.endsWith('px'))){
+              const px = typeof v === 'number' ? v+"px" : v;
+              rootStyle.setProperty(`--col-${k}-w`, px);
+            }
+          }
+        }
+
+        let colWMap = loadColWidths();
+        applyColWidths(colWMap);
+
+        function installColumnResizers(){
+          if(!headerRow) return;
+          const ths = Array.from(headerRow.querySelectorAll('th'));
+          ths.forEach(th => {
+            const cls = Array.from(th.classList).find(c => c.startsWith('col-'));
+            if(!cls) return; // skip if no recognizable column key
+            const key = cls.replace('col-','');
+            // ensure handle exists once
+            if(th.querySelector('.th-resizer')) return;
+            th.style.position = 'sticky'; // keep sticky; our handle is absolutely placed inside
+            const handle = document.createElement('div');
+            handle.className = 'th-resizer';
+            // Accessibility and hint attributes
+            handle.title = 'Drag to resize column';
+            handle.setAttribute('role','separator');
+            handle.setAttribute('aria-orientation','vertical');
+            handle.tabIndex = 0; // allow keyboard focus
+            th.appendChild(handle);
+
+            let startX=0, startW=0, dragging=false;
+            function onMove(e){
+              if(!dragging) return;
+              const dx = (e.clientX || (e.touches && e.touches[0]?.clientX) || 0) - startX;
+              let w = Math.max(60, Math.min(600, startW + dx));
+              rootStyle.setProperty(`--col-${key}-w`, w+'px');
+            }
+            function onUp(){
+              if(!dragging) return;
+              dragging=false;
+              document.body.classList.remove('th-resizing');
+              const cur = getComputedStyle(document.documentElement).getPropertyValue(`--col-${key}-w`).trim();
+              if(cur){
+                const num = Number(cur.replace('px','')) || 0;
+                if(num>0){ colWMap[key] = num; saveColWidths(colWMap); }
+              }
+              window.removeEventListener('mousemove', onMove);
+              window.removeEventListener('mouseup', onUp);
+              window.removeEventListener('touchmove', onMove);
+              window.removeEventListener('touchend', onUp);
+            }
+            function onDown(e){
+              e.preventDefault(); e.stopPropagation();
+              const rect = th.getBoundingClientRect();
+              startX = (e.clientX || (e.touches && e.touches[0]?.clientX) || 0);
+              const cur = getComputedStyle(document.documentElement).getPropertyValue(`--col-${key}-w`).trim();
+              const fallback = rect.width;
+              startW = cur ? Number(cur.replace('px','')) || fallback : fallback;
+              dragging=true;
+              document.body.classList.add('th-resizing');
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+              window.addEventListener('touchmove', onMove, {passive:false});
+              window.addEventListener('touchend', onUp);
+            }
+            handle.addEventListener('mousedown', onDown);
+            handle.addEventListener('touchstart', onDown, {passive:false});
+
+            // Keyboard support for nudging width
+            function nudge(delta){
+              const cur = getComputedStyle(document.documentElement).getPropertyValue(`--col-${key}-w`).trim();
+              const base = cur ? Number(cur.replace('px','')) : th.getBoundingClientRect().width;
+              const w = Math.max(60, Math.min(600, base + delta));
+              rootStyle.setProperty(`--col-${key}-w`, w+'px');
+              colWMap[key] = w; saveColWidths(colWMap);
+            }
+            handle.addEventListener('keydown', (e)=>{
+              if(e.key==='ArrowLeft'){ e.preventDefault(); nudge(-10); }
+              else if(e.key==='ArrowRight'){ e.preventDefault(); nudge(+10); }
+            });
+          });
+        }
+        
+        function resetColWidths(){
+          colWMap = {}; saveColWidths(colWMap);
+          // remove custom vars to fall back to defaults
+          ['id','time','kind','tag','method','status','url','actions'].forEach(k=>{
+            rootStyle.removeProperty(`--col-${k}-w`);
+          });
         }
         function applyStatFilter(kind, toggledOff){
           if (toggledOff) {
@@ -1918,5 +2132,8 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
         loadDrawerWidth();
         drawerResizer?.addEventListener('mousedown', (e)=>{ e.preventDefault(); startResize(e); });
         bootstrap();
+        document.addEventListener('DOMContentLoaded', () => {
+          try{ installColumnResizers(); }catch(e){ console.warn('column resizer init failed', e); }
+        });
     """#
 }
