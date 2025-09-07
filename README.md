@@ -51,7 +51,7 @@
 Add to your dependencies:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Husseinhj/LogTapIOS.git", from: "0.1.0")
+    .package(url: "https://github.com/Husseinhj/LogTapIOS.git", from: "0.2.0")
 ]
 ```
 
@@ -72,7 +72,7 @@ struct MyApp: App {
         #if DEBUG
           // Start LogTap server on port 8790
           var cfg = LogTap.Config()
-          cfg.port = 8795
+          cfg.port = 8790
           cfg.capacity = 5000
           cfg.enableOnRelease = false
           LogTap.shared.start(cfg)
