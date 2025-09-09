@@ -51,7 +51,6 @@
 Add to your dependencies:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/Husseinhj/LogTapIOS.git", from: "0.3.0")
     .package(url: "https://github.com/Husseinhj/LogTapIOS.git", from: "0.4.0")
 ]
 ```
