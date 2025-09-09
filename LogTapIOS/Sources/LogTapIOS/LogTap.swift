@@ -1,6 +1,7 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 import Foundation
+import UIKit
 import NIO
 import NIOHTTP1
 import NIOTransportServices
@@ -63,6 +64,16 @@ public final class LogTap {
                 let limit = comps?.queryItems?.first(where: {$0.name == "limit"})?.value.flatMap(Int.init) ?? 500
                 let list = self.store.snapshot(sinceId: sinceId, limit: limit)
                 let data = try! JSONEncoder().encode(list)
+                var bb = ByteBufferAllocator().buffer(capacity: data.count)
+                bb.writeBytes(data)
+                var h = HTTPHeaders()
+                h.add(name: "Content-Type", value: "application/json; charset=utf-8")
+                h.add(name: "Content-Length", value: String(bb.readableBytes))
+                return (.ok, h, bb, false)
+                
+            case (.GET, "/api/info"):
+                let info = DeviceAppInfo.current()
+                let data = try! JSONEncoder().encode(info)
                 var bb = ByteBufferAllocator().buffer(capacity: data.count)
                 bb.writeBytes(data)
                 var h = HTTPHeaders()

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+### 0.4.0 - 2025-09-09
+
+Enhance UI with DeviceAppInfo, settings popover, and improved accessibility
+
+- Add DeviceAppInfo to dynamically display app details in the UI.
+- Introduce a settings popover for UI customization, including theme selection, JSON formatting, auto-scroll, and column visibility.
+- Refactor filters and settings popovers for better UI consistency and accessibility.
+- Update the stats bar to be sticky and visually consistent with the header.
+- Improve the export menu UI with better accessibility and dynamic behavior.
+- Update README.md with the new version.
+- Add new dependencies and update existing ones in Package.swift.
+
 ### 0.3.0 - 2025-09-07
 
 - Fix WebSocket URL and improve data handling in LogTapServer

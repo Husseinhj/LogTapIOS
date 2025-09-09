@@ -9,238 +9,512 @@ import Foundation
 
 enum Resources {
   static let indexHtml: String = #"""
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>LogTap</title>
-    <link rel="stylesheet" href="/app.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet"/>
-  </head>
-  <body class="ui">
-    <!-- Header -->
-    <header class="hdr blur elev">
-      <div class="brand">
-        <a class="logo gh" href="https://github.com/Husseinhj/LogTapIOS" target="_blank" rel="noopener" title="Open GitHub repository" aria-label="Open GitHub repository">
-          <svg class="gh-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.62-.17 1.29-.27 2-.27s1.38.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-        </a>
-        <div class="titles">
-          <div class="title">LogTap</div>
-          <div class="sub">Inspect HTTP · WebSocket · Logs</div>
+  <!doctype html>
+  <html>
+    <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>LogTap</title>
+      <link rel="stylesheet" href="/app.css"/>
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet"/>
+    </head>
+    <body class="ui">
+      <!-- Header -->
+      <header class="hdr blur elev">
+        <!-- Replaced static brand with dynamic DeviceAppInfo -->
+        <div class="brand" id="deviceBrand">
+          <div class="app-icon" id="appIcon" aria-hidden="true" title="App icon"></div>
+          <div class="titles">
+            <div class="title" id="appName">Loading…</div>
+            <div class="sub" id="appMeta">Fetching device info…</div>
+          </div>
         </div>
-      </div>
-      <nav class="bar">
-        <div id="wsStatus" class="chip stat">● Disconnected</div>
-        <div class="search field">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5Zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"/></svg>
-          <input id="search" class="input" type="search" placeholder="Search url, method, headers, body…  ⌘/Ctrl + K"/>
-        </div>
-        <button id="filtersBtn" class="btn ghost" title="Filters" aria-haspopup="true" aria-expanded="false">
-          <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-          <span class="label">Filters</span>
-          <span class="material-symbols-outlined dropdown" aria-hidden="true">arrow_drop_down</span>
-        </button>
-        <div class="menu">
-          <button id="exportBtn" class="icon" title="Export" aria-label="Export">
-            <span class="material-symbols-outlined" aria-hidden="true">ios_share</span>
+        <nav class="bar">
+          <div id="wsStatus" class="chip stat">● Disconnected</div>
+          <div class="search field">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5Zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"/></svg>
+            <input id="search" class="input" type="search" placeholder="Search url, method, headers, body…  ⌘/Ctrl + K"/>
+          </div>
+          <button id="filtersBtn" class="btn ghost" title="Filters" aria-haspopup="true" aria-expanded="false">
+            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+            <span class="label">Filters</span>
+            <span class="material-symbols-outlined dropdown" aria-hidden="true">arrow_drop_down</span>
           </button>
-          <div id="exportMenu" class="popover hidden" role="menu" aria-hidden="true">
-            <button id="exportJson" class="btn block" role="menuitem">Export JSON</button>
-            <button id="exportHtml" class="btn block" role="menuitem">Export Report</button>
-          </div>
-        </div>
-        <button id="clearBtn" class="icon" title="Clear all logs" aria-label="Clear all logs">
-          <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
-        </button>
-        <button id="themeToggle" class="icon" title="Toggle theme" aria-label="Toggle theme">
-          <span class="material-symbols-outlined ico-sun" aria-hidden="true">light_mode</span>
-          <span class="material-symbols-outlined ico-moon" aria-hidden="true">dark_mode</span>
-        </button>
-
-        <!-- Filters popover (Material 3 sheet) -->
-        <div id="filtersPanel" class="popover hidden fp" role="dialog" aria-label="Filters">
-          <div class="fp-head">
-            <div class="fp-title">Filters</div>
-            <div class="fp-sub">Narrow what you see in the table</div>
-          </div>
-          <div class="fp-grid">
-            <label class="fp-field">View
-              <select id="viewMode" class="select">
-                <option value="mix">Mix (All)</option>
-                <option value="network">Network only</option>
-                <option value="log">Logger only</option>
-              </select>
-            </label>
-            <label class="fp-field">Method
-              <select id="methodFilter" class="select">
-                <option value="">All</option>
-                <option>GET</option><option>POST</option><option>PUT</option>
-                <option>PATCH</option><option>DELETE</option><option>WS</option>
-              </select>
-            </label>
-            <label class="fp-field">Status class
-              <select id="statusFilter" class="select">
-                <option value="">Any</option>
-                <option value="2xx">2xx</option>
-                <option value="3xx">3xx</option>
-                <option value="4xx">4xx</option>
-                <option value="5xx">5xx</option>
-              </select>
-            </label>
-            <label class="fp-field">Codes
-              <input id="statusCodeFilter" class="input" type="text" inputmode="numeric" pattern="[0-9xX,-,\s]*" placeholder="200, 2xx, 400-404"/>
-            </label>
-            <label class="fp-field">Level
-              <select id="levelFilter" class="select">
-                <option value="">Any Level</option>
-                <option value="VERBOSE">Verbose</option>
-                <option value="DEBUG">Debug</option>
-                <option value="INFO">Info</option>
-                <option value="WARN">Warn</option>
-                <option value="ERROR">Error</option>
-                <option value="ASSERT">Assert</option>
-              </select>
-            </label>
-            <label class="fp-field">Colors
-              <select id="colorScheme" class="select">
-                <option value="android">Android Studio</option>
-                <option value="xcode">Xcode</option>
-                <option value="vscode">Visual Studio Code</option>
-                <option value="grafana">Grafana</option>
-              </select>
-            </label>
-            <label class="fp-checkbox">
-              <input type="checkbox" id="jsonPretty"/>
-              <span class="box"></span>
-              <span class="lbl">Pretty JSON</span>
-            </label>
-            <label class="fp-checkbox">
-              <input type="checkbox" id="autoScroll" checked/>
-              <span class="box"></span>
-              <span class="lbl">Auto‑scroll</span>
-            </label>
-            <div class="fp-cols">
-              <div class="fp-cols-title">Columns</div>
-              <label class="fp-checkbox"><input type="checkbox" id="colId" checked/><span class="box"></span><span class="lbl">ID</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colTime" checked/><span class="box"></span><span class="lbl">Time</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colKind" checked/><span class="box"></span><span class="lbl">Kind</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colTag" checked/><span class="box"></span><span class="lbl">Tag</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colMethod" checked/><span class="box"></span><span class="lbl">Method</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colStatus" checked/><span class="box"></span><span class="lbl">Status</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colUrl" checked/><span class="box"></span><span class="lbl">URL / Summary</span></label>
-              <label class="fp-checkbox"><input type="checkbox" id="colActions" checked/><span class="box"></span><span class="lbl">Actions</span></label>
+          <button id="settingsBtn" class="btn ghost" title="Settings" aria-haspopup="true" aria-expanded="false">
+            <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+            <span class="label">Settings</span>
+            <span class="material-symbols-outlined dropdown" aria-hidden="true">arrow_drop_down</span>
+          </button>
+          <!-- Settings popover (separate from Filters) -->
+          <div id="settingsPanel" class="hidden">
+            <div class="sp-head">
+              <div class="sp-icon"><span class="material-symbols-outlined">tune</span></div>
+              <div class="sp-title">Settings</div>
+              <button id="settingsClose" class="icon" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+            </div>
+          
+            <div class="sp-body">
+              <div class="sp-section">
+                <h4>Theme</h4>
+                <div class="sp-row">
+                  <div>Logs Style</div>
+                  <select id="colorScheme" class="select">
+                      <option value="android">Android Studio</option>
+                      <option value="xcode">Xcode</option>
+                      <option value="vscode">Visual Studio Code</option>
+                      <option value="grafana">Grafana</option>
+                    </select>
+                </div>
+              </div>
+          
+              <div class="sp-section">
+                <h4>Behavior</h4>
+                <div class="sp-row">
+                  <div>Pretty JSON</div>
+                  <label class="switch">
+                    <input type="checkbox" id="jsonPretty">
+                    <span class="track"></span><span class="thumb"></span>
+                  </label>
+                </div>
+                <div class="sp-row">
+                  <div>Auto scroll</div>
+                  <label class="switch">
+                    <input type="checkbox" id="autoScroll">
+                    <span class="track"></span><span class="thumb"></span>
+                  </label>
+                </div>
+              </div>
+          
+              <div class="sp-section">
+                <h4>Columns</h4>
+                <label class="fp-checkbox"><input type="checkbox" id="colId" checked/><span class="box"></span><span class="lbl">ID</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colTime" checked/><span class="box"></span><span class="lbl">Time</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colKind" checked/><span class="box"></span><span class="lbl">Kind</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colTag" checked/><span class="box"></span><span class="lbl">Tag</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colMethod" checked/><span class="box"></span><span class="lbl">Method</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colStatus" checked/><span class="box"></span><span class="lbl">Status</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colUrl" checked/><span class="box"></span><span class="lbl">URL / Summary</span></label>
+                <label class="fp-checkbox"><input type="checkbox" id="colActions" checked/><span class="box"></span><span class="lbl">Actions</span></label>
+              </div>
+            </div>
+            <div class="sp-foot">
+              <span class="hint">Preferences are saved locally</span>
+              <div>
+                <button id="settingsReset" class="btn-reset">Reset</button>
+                <button id="settingsClose2" class="btn-close">Close</button>
+              </div>
             </div>
           </div>
-          <div class="fp-actions">
-            <button id="filtersReset" class="btn ghost"><span class="material-symbols-outlined" aria-hidden="true">restart_alt</span> Reset</button>
-            <button id="filtersClose" class="btn"><span class="material-symbols-outlined" aria-hidden="true">done</span> Apply</button>
+          <div class="menu">
+            <button id="exportBtn" class="icon" title="Export" aria-label="Export">
+              <span class="material-symbols-outlined" aria-hidden="true">ios_share</span>
+            </button>
+            <div id="exportMenu" class="fp hidden popover" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+              <div class="fp-head">
+                <div class="fp-icon material-symbols-outlined" aria-hidden="true">ios_share</div>
+                <div class="fp-title" id="exportTitle">Export</div>
+                <button id="exportClose" class="icon" title="Close export" aria-label="Close export">
+                  <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
+              <div class="fp-body">
+                <div class="fp-section">
+                  <button id="exportJson" class="btn block" type="button">Export JSON</button>
+                  <button id="exportHtml" class="btn block" type="button">Export Report</button>
+                </div>
+              </div>
+              <div class="fp-foot">
+                <span class="hint">Export your logs in different formats</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </nav>
-    </header>
+          <button id="clearBtn" class="icon" title="Clear all logs" aria-label="Clear all logs">
+            <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
+          </button>
+          <button id="themeToggle" class="icon" title="Toggle theme" aria-label="Toggle theme">
+            <span class="material-symbols-outlined ico-sun" aria-hidden="true">light_mode</span>
+            <span class="material-symbols-outlined ico-moon" aria-hidden="true">dark_mode</span>
+          </button>
 
-    <!-- Stat pills -->
-    <section class="stats">
-      <div class="chip" id="chipTotal">Total: 0</div>
-      <div class="chip" id="chipHttp">HTTP: 0</div>
-      <div class="chip" id="chipWs">WS: 0</div>
-      <div class="chip" id="chipLog">LOG: 0</div>
-      <div class="chip" id="chipGet">GET: 0</div>
-      <div class="chip" id="chipPost">POST: 0</div>
-    </section>
-
-    <main class="shell">
-      <div class="panel elev">
-        <table id="logtbl" class="tbl">
-          <thead>
-            <tr>
-              <th class="col-id">ID</th>
-              <th class="col-time">Time</th>
-              <th class="col-kind">Kind</th>
-              <th class="col-tag">Tag</th>
-              <th class="col-method">Method</th>
-              <th class="col-status">Status</th>
-              <th class="col-url">URL / Summary</th>
-              <th class="col-actions">Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <aside id="drawer" class="drawer elev">
-        <div class="d-resize" id="drawerResizer" aria-hidden="true" title="Drag to resize"></div>
-        <header class="d-head">
-          <div>
-            <div id="drawerTitle" class="d-title">Details</div>
-            <div id="drawerSub" class="d-sub"></div>
+          <!-- Filters popover (Material 3 sheet) -->
+          <div id="filtersPanel" class="fp hidden" role="dialog" aria-modal="true" aria-labelledby="filtersTitle">
+            <div class="fp-head">
+              <div class="fp-icon material-symbols-outlined" aria-hidden="true">filter_list</div>
+              <div class="fp-title" id="filtersTitle">Filters</div>
+              <button id="filtersClose" class="icon" title="Close filters" aria-label="Close filters">
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+              </button>
+            </div>
+          
+            <div class="fp-body">
+                <!-- Quick Filter Mode -->
+                <div class="fp-section">
+                  <h4>Mode</h4>
+                  <div class="fp-row">
+                    <label class="fp-radio">
+                      <input type="radio" name="filterMode" value="" checked>
+                      <span class="lbl">All (Mix)</span>
+                    </label>
+                    <label class="fp-radio">
+                      <input type="radio" name="filterMode" value="network">
+                      <span class="lbl">Network</span>
+                    </label>
+                    <label class="fp-radio">
+                      <input type="radio" name="filterMode" value="log">
+                      <span class="lbl">Log</span>
+                    </label>
+                  </div>
+                </div>
+            
+              <!-- HTTP / WS -->
+              <div class="fp-section">
+                <h4>HTTP &amp; WebSocket</h4>
+          
+                <div class="fp-row">
+                  <label class="lbl" for="methodFilter">Method</label>
+                  <select id="methodFilter" class="select">
+                    <option value="">Any</option>
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="PATCH">PATCH</option>
+                    <option value="DELETE">DELETE</option>
+                    <option value="WS">WS</option>
+                  </select>
+                </div>
+          
+                <div class="fp-row">
+                  <label class="lbl" for="statusFilter">Status class</label>
+                  <select id="statusFilter" class="select">
+                    <option value="">Any</option>
+                    <option value="2xx">2xx (Success)</option>
+                    <option value="3xx">3xx (Redirect)</option>
+                    <option value="4xx">4xx (Client error)</option>
+                    <option value="5xx">5xx (Server error)</option>
+                  </select>
+                </div>
+          
+                <div class="fp-row">
+                  <label class="lbl" for="statusCodeFilter">Status code(s)</label>
+                  <input id="statusCodeFilter" class="input" placeholder="e.g. 200,404, 500-599">
+                </div>
+              </div>
+          
+              <!-- Logger -->
+              <div class="fp-section">
+                <h4>Logger</h4>
+                <div class="fp-row">
+                  <label class="lbl" for="levelFilter">Level</label>
+                  <select id="levelFilter" class="select">
+                    <option value="">Any</option>
+                    <option value="VERBOSE">VERBOSE</option>
+                    <option value="DEBUG">DEBUG</option>
+                    <option value="INFO">INFO</option>
+                    <option value="WARN">WARN</option>
+                    <option value="ERROR">ERROR</option>
+                    <option value="ASSERT">ASSERT</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          
+            <div class="fp-foot">
+              <span class="hint">Tip: click a stat chip to quick-filter; click it again to reset.</span>
+              <div>
+                <button id="filtersReset" class="btn-reset" type="button">Reset</button>
+                <button id="filtersCloseBottom" class="btn-close" type="button">Close</button>
+              </div>
+            </div>
           </div>
-          <button id="drawerClose" class="icon" title="Close (Esc)">×</button>
-        </header>
-        <nav class="tabs">
-          <button class="tab active" data-tab="overview" id="tabBtn-overview">Overview</button>
-          <button class="tab" data-tab="request" id="tabBtn-request">Request</button>
-          <button class="tab" data-tab="response" id="tabBtn-response">Response</button>
-          <button class="tab" data-tab="headers" id="tabBtn-headers">Headers</button>
         </nav>
-        <section class="panes">
-          <div class="pane active" id="tab-overview">
-            <dl class="kv">
-              <div><dt>ID</dt><dd id="ov-id"></dd></div>
-              <div><dt>Time</dt><dd id="ov-time"></dd></div>
-              <div><dt>Kind</dt><dd id="ov-kind"></dd></div>
-              <div><dt>Direction</dt><dd id="ov-dir"></dd></div>
-              <div id="row-method"><dt>Method</dt><dd id="ov-method"></dd></div>
-              <div id="row-status"><dt>Status</dt><dd id="ov-status"></dd></div>
-              <div id="row-url"><dt>URL</dt><dd id="ov-url"></dd></div>
-              <div id="row-level" class="hidden"><dt>Level</dt><dd id="ov-level"></dd></div>
-              <div id="row-tag" class="hidden"><dt>Tag</dt><dd id="ov-tag"></dd></div>
-              <div class="full"><dt>Summary</dt><dd><div class="sum"><button id="ov-summary-copy" class="icon" title="Copy Summary" aria-label="Copy Summary"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button><pre class="code" id="ov-summary"></pre></div></dd></div>
-              <div id="row-took"><dt>Took</dt><dd id="ov-took"></dd></div>
-              <div><dt>Thread</dt><dd id="ov-thread"></dd></div>
-              <div class="full" id="row-curl"><dt>cURL</dt><dd><div class="curl"><button id="ov-curl-copy" class="icon" title="Copy cURL" aria-label="Copy cURL"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button><pre class="code" id="ov-curl"></pre></div></dd></div>
-            </dl>
-          </div>
-          <div class="pane" id="tab-request">
-            <h4>Request Body</h4>
-            <pre class="code json" id="req-body"></pre>
-          </div>
-          <div class="pane" id="tab-response">
-            <h4>Response Body</h4>
-            <pre class="code json" id="resp-body"></pre>
-          </div>
-          <div class="pane" id="tab-headers">
-            <h4>Headers</h4>
-            <div class="cols">
-              <div>
-                <h5>Request</h5>
-                <pre class="code" id="req-headers"></pre>
-              </div>
-              <div>
-                <h5>Response</h5>
-                <pre class="code" id="resp-headers"></pre>
+      </header>
+
+      <!-- Stat pills -->
+      <section class="stats">
+        <div class="chip" id="chipTotal">Total: 0</div>
+        <div class="chip" id="chipHttp">HTTP: 0</div>
+        <div class="chip" id="chipWs">WS: 0</div>
+        <div class="chip" id="chipLog">LOG: 0</div>
+        <div class="chip" id="chipGet">GET: 0</div>
+        <div class="chip" id="chipPost">POST: 0</div>
+      </section>
+
+      <main class="shell">
+        <div class="panel elev">
+          <table id="logtbl" class="tbl">
+            <thead>
+              <tr>
+                <th class="col-id">ID</th>
+                <th class="col-time">Time</th>
+                <th class="col-kind">Kind</th>
+                <th class="col-tag">Tag</th>
+                <th class="col-method">Method</th>
+                <th class="col-status">Status</th>
+                <th class="col-url">URL / Summary</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <aside id="drawer" class="drawer elev">
+          <div class="d-resize" id="drawerResizer" aria-hidden="true" title="Drag to resize"></div>
+          <header class="d-head">
+            <div>
+              <div id="drawerTitle" class="d-title">Details</div>
+              <div id="drawerSub" class="d-sub"></div>
+            </div>
+            <button id="drawerClose" class="icon" title="Close (Esc)">×</button>
+          </header>
+          <nav class="tabs">
+            <button class="tab active" data-tab="overview" id="tabBtn-overview">Overview</button>
+            <button class="tab" data-tab="request" id="tabBtn-request">Request</button>
+            <button class="tab" data-tab="response" id="tabBtn-response">Response</button>
+            <button class="tab" data-tab="headers" id="tabBtn-headers">Headers</button>
+          </nav>
+          <section class="panes">
+            <div class="pane active" id="tab-overview">
+              <dl class="kv">
+                <div><dt>ID</dt><dd id="ov-id"></dd></div>
+                <div><dt>Time</dt><dd id="ov-time"></dd></div>
+                <div><dt>Kind</dt><dd id="ov-kind"></dd></div>
+                <div><dt>Direction</dt><dd id="ov-dir"></dd></div>
+                <div id="row-method"><dt>Method</dt><dd id="ov-method"></dd></div>
+                <div id="row-status"><dt>Status</dt><dd id="ov-status"></dd></div>
+                <div id="row-url"><dt>URL</dt><dd id="ov-url"></dd></div>
+                <div id="row-level" class="hidden"><dt>Level</dt><dd id="ov-level"></dd></div>
+                <div id="row-tag" class="hidden"><dt>Tag</dt><dd id="ov-tag"></dd></div>
+                <div class="full"><dt>Summary</dt><dd><div class="sum"><button id="ov-summary-copy" class="icon" title="Copy Summary" aria-label="Copy Summary"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button><pre class="code" id="ov-summary"></pre></div></dd></div>
+                <div id="row-took"><dt>Took</dt><dd id="ov-took"></dd></div>
+                <div><dt>Thread</dt><dd id="ov-thread"></dd></div>
+                <div class="full" id="row-curl"><dt>cURL</dt><dd><div class="curl"><button id="ov-curl-copy" class="icon" title="Copy cURL" aria-label="Copy cURL"><span class="material-symbols-outlined" aria-hidden="true">content_copy</span></button><pre class="code" id="ov-curl"></pre></div></dd></div>
+              </dl>
+            </div>
+            <div class="pane" id="tab-request">
+              <h4>Request Body</h4>
+              <pre class="code json" id="req-body"></pre>
+            </div>
+            <div class="pane" id="tab-response">
+              <h4>Response Body</h4>
+              <pre class="code json" id="resp-body"></pre>
+            </div>
+            <div class="pane" id="tab-headers">
+              <h4>Headers</h4>
+              <div class="cols">
+                <div>
+                  <h5>Request</h5>
+                  <pre class="code" id="req-headers"></pre>
+                </div>
+                <div>
+                  <h5>Response</h5>
+                  <pre class="code" id="resp-headers"></pre>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </aside>
-    </main>
+          </section>
+        </aside>
+      </main>
 
-    <script src="/app.js"></script>
-   <div class="repo">
-     <a href="https://github.com/Husseinhj/LogTapIOS" target="_blank" rel="noopener">
-       <svg class="gh-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.62-.17 1.29-.27 2-.27s1.38.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-       GitHub — Husseinhj/LogTapIOS
-     </a>
-     <div class="made">Made with ❤️ from Germany</div>
-   </div>
+      <script src="/app.js"></script>
+      <script>
+  (function(){
+    const settingsPanel = document.getElementById('settingsPanel');
+    const filtersPanel  = document.getElementById('filtersPanel');
+    const settingsBtn   = document.getElementById('settingsBtn');
+    const filtersBtn    = document.getElementById('filtersBtn');
+    const settingsCloseTop = document.getElementById('settingsClose');
+    const settingsCloseBottom = document.getElementById('settingsClose2');
+    const filtersCloseTop = document.getElementById('filtersClose');
+    const filtersCloseBottom = document.getElementById('filtersCloseBottom');
 
-  </body>
-</html>
-"""#
+    const exportBtn = document.getElementById('exportBtn');
+    const exportMenu = document.getElementById('exportMenu');
+    const exportClose = document.getElementById('exportClose');
+    const exportCloseBottom = document.getElementById('exportCloseBottom');
+
+    // --- Robust helpers -------------------------------------------------------
+    function isInPath(target, ev){
+      const path = ev.composedPath ? ev.composedPath() : [];
+      return target && (target === ev.target || target.contains(ev.target) || path.includes(target));
+    }
+    function closePanel(panelEl, toggleBtn){
+      if (!panelEl) return;
+      panelEl.classList.add('hidden');
+      if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+    }
+    function closeExport(){
+      if (!exportMenu) return;
+      exportMenu.classList.add('hidden');
+      exportMenu.setAttribute('aria-hidden','true');
+    }
+    let justOpened = false;
+    function openExport(){
+      closePanel(settingsPanel, settingsBtn);
+      closePanel(filtersPanel,  filtersBtn);
+      if (!exportMenu) return;
+      justOpened = true;
+      exportMenu.classList.remove('hidden');
+      exportMenu.removeAttribute('style');
+      exportMenu.setAttribute('aria-hidden','false');
+      // ensure it can receive focus (for Esc key)
+      if (!exportMenu.hasAttribute('tabindex')) exportMenu.setAttribute('tabindex','-1');
+      exportMenu.focus({preventScroll:true});
+      // flip the guard on next tick so outside-click won't instantly close
+      requestAnimationFrame(()=>{ justOpened = false; });
+    }
+    function toggleExport(ev){
+      ev.stopPropagation();
+      if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+      if (exportMenu.classList.contains('hidden')) openExport(); else closeExport();
+    }
+
+    // --- Wire up buttons ------------------------------------------------------
+    settingsCloseTop?.addEventListener('click', () => closePanel(settingsPanel, settingsBtn));
+    settingsCloseBottom?.addEventListener('click', () => closePanel(settingsPanel, settingsBtn));
+    filtersCloseTop?.addEventListener('click', () => closePanel(filtersPanel, filtersBtn));
+    filtersCloseBottom?.addEventListener('click', () => closePanel(filtersPanel, filtersBtn));
+
+    // Use pointer events so it works with mouse & touch, and prevent bubbling
+    ['pointerdown','click'].forEach(type=>{
+      exportBtn?.addEventListener(type, toggleExport);
+    });
+    exportClose?.addEventListener('click', closeExport);
+    exportCloseBottom?.addEventListener('click', closeExport);
+
+    // Clicking anywhere else — but not the export button or menu — closes it
+    window.addEventListener('click', (ev)=>{
+      if (justOpened) return; // skip first bubble after opening
+      if (!isInPath(exportMenu, ev) && !isInPath(exportBtn, ev)) {
+        closeExport();
+      }
+    }, true); // capture phase for reliability
+
+    // ESC closes any open panel/menu
+    window.addEventListener('keydown', (ev)=>{
+      if (ev.key === 'Escape') {
+        closeExport();
+        closePanel(settingsPanel, settingsBtn);
+        closePanel(filtersPanel,  filtersBtn);
+      }
+    });
+
+    // When opening settings or filters, ensure export menu is closed
+    settingsBtn?.addEventListener('click', ()=> closeExport());
+    filtersBtn?.addEventListener('click',  ()=> closeExport());
+  })();
+  </script>
+  <script>
+  (function(){
+    // --- Filter Mode (All / Network / Log) ------------------------------------
+    const tbody = document.querySelector('#logtbl tbody');
+    const modeRadios = document.querySelectorAll('input[name="filterMode"]');
+
+    // Persist / restore mode
+    let filterMode = localStorage.getItem('filterMode') || '';
+    modeRadios.forEach(r => { r.checked = (r.value === filterMode); });
+
+    // Helpers to classify a row
+    function hasLevelClass(tr){
+      // Any class like "level-DEBUG", "level-INFO", etc. means logger row
+      return Array.from(tr.classList).some(c => c.startsWith('level-'));
+    }
+    function textOf(sel, root){
+      const el = (root || document).querySelector(sel);
+      return (el ? (el.textContent || '') : '').trim();
+    }
+    function rowKind(tr){
+      // Prefer cached data-kind
+      if (tr.dataset.kind) return tr.dataset.kind;
+
+      // 1) If row carries a logger level class, it's a LOG row
+      if (hasLevelClass(tr)) return tr.dataset.kind = 'LOG';
+
+      // 2) Inspect "Kind" cell text if present
+      const kindText = textOf('.col-kind', tr).toUpperCase();
+      if (kindText.includes('LOG')) return tr.dataset.kind = 'LOG';
+      if (kindText.includes('HTTP') || kindText.includes('WEBSOCKET')) return tr.dataset.kind = 'NETWORK';
+
+      // 3) Heuristic: if method cell looks like an HTTP/WS method, assume NETWORK
+      const m = textOf('.col-method', tr).toUpperCase();
+      if (/(GET|POST|PUT|PATCH|DELETE|WS)/.test(m)) return tr.dataset.kind = 'NETWORK';
+
+      // 4) Fallback to LOG (better to show in "Log" than hide everything)
+      return tr.dataset.kind = 'LOG';
+    }
+
+    // Apply current filter mode to all current rows
+    function applyMode(){
+      document.body.dataset.mode = filterMode || 'all';
+      if (!tbody) return;
+      const rows = tbody.querySelectorAll('tr');
+      rows.forEach(tr => {
+        const kind = rowKind(tr); // computes and caches data-kind
+        const show =
+          (filterMode === '') ||
+          (filterMode === 'network' && kind === 'NETWORK') ||
+          (filterMode === 'log' && kind === 'LOG');
+        tr.style.display = show ? '' : 'none';
+      });
+    }
+
+    // MutationObserver: classify and filter newly added rows
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        m.addedNodes.forEach(node => {
+          if (!(node instanceof HTMLElement)) return;
+          if (node.tagName !== 'TR') return;
+          // classify once; value cached on dataset
+          rowKind(node);
+          if (filterMode) {
+            const show =
+              (filterMode === 'network' && node.dataset.kind === 'NETWORK') ||
+              (filterMode === 'log' && node.dataset.kind === 'LOG');
+            node.style.display = show ? '' : 'none';
+          }
+        });
+      }
+    });
+    if (tbody) mo.observe(tbody, { childList: true });
+
+    // Wire radios
+    modeRadios.forEach(r => {
+      r.addEventListener('change', (e) => {
+        filterMode = e.target.value;
+        localStorage.setItem('filterMode', filterMode);
+        applyMode();
+      });
+    });
+
+    // Initial pass
+    applyMode();
+  })();
+  </script>
+     <div class="repo">
+       <a href="https://github.com/Husseinhj/LogTapIOS" target="_blank" rel="noopener">
+         <svg class="gh-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.62-.17 1.29-.27 2-.27s1.38.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+         GitHub — Husseinhj/LogTapIOS
+       </a>
+       <div class="made">Made with ❤️ from Germany</div>
+     </div>
+
+    </body>
+  </html>
+  """#
 
   static let appCss: String = #"""
+/* DeviceAppInfo icon */
+.app-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  background-size:cover;
+  background-position:center;
+  flex-shrink:0;
+}
+
 /* ========================= Material 3 (tokens + components) ========================= */
 /* Color roles */
 :root[data-theme="light"]{
@@ -351,21 +625,25 @@ body.ui{margin:0;background:var(--bg);color:var(--text);font:14px ui-sans-serif,
 .btn:hover::after,.icon:hover::after{opacity:var(--state-hover)}
 .btn:active::after,.icon:active::after{opacity:var(--state-pressed)}
 #filtersBtn{display:flex;align-items:center;gap:4px}
-#filtersBtn .material-symbols-outlined.dropdown{font-size:20px;opacity:.7}
-#filtersBtn .label{font-size:14px}
+#filtersBtn .material-symbols-outlined.dropdown,
+#settingsBtn .material-symbols-outlined.dropdown{font-size:20px;opacity:.7}
+#filtersBtn .label, #settingsBtn .label{font-size:14px}
 
 .icon{width:36px;height:36px;border-radius:12px;background:transparent;border:1px solid var(--line);color:var(--text);font-size:18px;line-height:1;display:grid;place-items:center;position:relative;overflow:hidden}
 .icon.solid{background:var(--surface)}
 .icon .material-symbols-outlined{font-size:20px}
 
-.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;position:relative}
 .menu{position:relative}
 
 .popover{position:absolute;top:100%;margin-top:8px;right:0;background:var(--md-sys-color-surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--elev-3);padding:10px;z-index:50;min-width:220px}
 .popover.hidden{display:none}
+.popover.hidden{ display:none !important; }
+.hidden{ display:none !important; }
+.fp.hidden{ display:none !important; }
 
-/* Filters popover (Material 3) */
 .fp{ padding:0; min-width: 360px; max-width: 520px; }
+#exportMenu{ position:absolute; top:100%; right:0; margin-top:8px; background:var(--md-sys-color-surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--elev-3); z-index:60; }
 .fp-head{ padding:14px 16px 8px; border-bottom:1px solid var(--line); }
 .fp-title{ font-weight:700; }
 .fp-sub{ color:var(--muted); font-size:12px; margin-top:2px; }
@@ -376,58 +654,133 @@ body.ui{margin:0;background:var(--bg);color:var(--text);font:14px ui-sans-serif,
 .fp-actions .btn{ display:inline-flex; align-items:center; gap:6px; }
 @media (max-width:520px){ .fp{ min-width: 280px; } .fp-grid{ grid-template-columns:1fr; } }
 
-# Export menu buttons styled as Material 3 list items
-#exportMenu .btn.block {
+/* Export menu buttons styled as Material 3 list items */
+/* === Export menu compact & fixed layout overrides === */
+#exportMenu.fp.popover{
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  min-width: 260px;
+  max-width: 320px;
+  padding: 0; /* container gets no padding; inner sections handle it */
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--elev-3);
+  z-index: 60;
+}
+#exportMenu.hidden { display: none !important; }
+
+#exportMenu .fp-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+#exportMenu .fp-icon{
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+#exportMenu .fp-title{
+  font-weight: 700;
+  font-size: 14px;
+  flex: 1;
+  min-width: 0;
+}
+#exportMenu .icon{
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+#exportMenu .fp-body{ padding: 6px; }
+#exportMenu .fp-section{ padding: 0; margin: 0; }
+
+/* Buttons look like list items */
+#exportMenu .btn.block{
   background: transparent;
   border: 0;
-  border-radius: 12px;
-  padding: 10px 16px;
+  border-radius: 10px;
+  padding: 10px 12px;
   font-size: 14px;
   color: var(--text);
   justify-content: flex-start;
   width: 100%;
   text-align: left;
 }
-#exportMenu .btn.block:hover::after {
-  opacity: var(--state-hover);
+#exportMenu .btn.block:hover::after { opacity: var(--state-hover); }
+#exportMenu .btn.block:active::after { opacity: var(--state-pressed); }
+
+/* Footer hint and close */
+#exportMenu .fp-foot{
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-#exportMenu .btn.block:active::after {
-  opacity: var(--state-pressed);
+#exportMenu .fp-foot .hint{
+  color: var(--muted);
+  font-size: 12px;
 }
 
 /* Material 3 checkboxes inside filter panel */
-.fp-checkbox {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:6px 4px;
-  cursor:pointer;
-  user-select:none;
+/* === Material 3 Inspired Checkboxes & Radios === */
+.fp-checkbox,
+.fp-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
 }
-.fp-checkbox input {
-  appearance:none;
-  -webkit-appearance:none;
-  width:18px;
-  height:18px;
-  border:2px solid var(--line);
-  border-radius:4px;
-  background:var(--surface);
-  display:grid;
-  place-items:center;
-  margin:0;
+.fp-checkbox:hover,
+.fp-radio:hover {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
 }
-.fp-checkbox input:checked {
-  background:var(--md-sys-color-primary);
-  border-color:var(--md-sys-color-primary);
+.fp-checkbox input,
+.fp-radio input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--line);
+  border-radius: 6px; /* default square for checkbox */
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+.fp-radio input {
+  border-radius: 50%; /* radios are round */
+}
+.fp-checkbox input:checked,
+.fp-radio input:checked {
+  background: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
 }
 .fp-checkbox input:checked::before {
-  content:"✓";
-  color:var(--md-sys-color-on-primary);
-  font-size:14px;
-  line-height:1;
+  content: "✓";
+  color: var(--md-sys-color-on-primary);
+  font-size: 14px;
 }
-.fp-checkbox .lbl {
-  font-size:14px;
+.fp-radio input:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--md-sys-color-on-primary);
 }
 
 /* Filters: Columns grid */
@@ -446,7 +799,17 @@ body.hide-col-url     #logtbl .col-url{display:none}
 body.hide-col-actions #logtbl .col-actions{display:none}
 
 /* ========================= Assist/Stat Chips (M3) ========================= */
-.stats{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px}
+.stats {
+  position: sticky;
+  top: 64px; /* height of your header */
+  z-index: 30; /* slightly below header’s z-index (40) */
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--md-sys-color-surface); /* match header bg */
+  border-bottom: 1px solid var(--line);
+}
 .chip{background:var(--md-sys-color-surface-container-high);border:1px solid var(--line);padding:6px 12px;border-radius:999px;transition:background .15s,border-color .15s,color .15s,box-shadow .15s}
 
 .chip.stat{font:12px ui-monospace,Menlo,monospace}
@@ -586,11 +949,9 @@ body.hide-col-actions #logtbl .col-actions{display:none}
 .tbl thead th{ position: sticky; }
 
 .tbl thead th{ position: sticky; }
-
 .tbl thead th{ position: sticky; }
 
 .tbl thead th{ position: sticky; }
-
 .tbl thead th{ position: sticky; }
 
 .tbl thead th{ position: sticky; }
@@ -607,12 +968,16 @@ body.hide-col-actions #logtbl .col-actions{display:none}
     z-index:5;
   }
   /* always-visible divider line */
-  .th-resizer::after{
-    content:"";
-    position:absolute; top:8px; bottom:8px; left:4px; width:2px;
-    background: color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
-    transition: background .15s, left .15s, width .15s;
-  }
+    .th-resizer::after{
+      content:"";
+      position:absolute;
+      top:8px;
+      bottom:8px;
+      left:4px;
+      width:2px;
+      background: color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
+      transition: background .15s, left .15s, width .15s;
+    }
   /* subtle grabber dots */
   .th-resizer::before{
     content:"";
@@ -645,6 +1010,41 @@ body.hide-col-actions #logtbl .col-actions{display:none}
 .col-id{width:var(--col-id-w,72px)}.col-time{width:var(--col-time-w,150px)}.col-kind{width:var(--col-kind-w,120px)}.col-tag{width:var(--col-tag-w,140px)}.col-method{width:var(--col-method-w,92px)}.col-status{width:var(--col-status-w,92px)}.col-actions{width:var(--col-actions-w,170px)}
 
 /* Status & kind colors */
+
+.fp-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.fp-radio input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  margin: 0;
+}
+.fp-radio input:checked {
+  background: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+.fp-radio input:checked::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--md-sys-color-on-primary);
+  margin: auto;
+}
+.fp-radio .lbl {
+  font-size: 14px;
+}
 
 /* Fallback WS palette (overridden per scheme below) */
 :root{
@@ -681,7 +1081,7 @@ body.hide-col-actions #logtbl .col-actions{display:none}
   --m-delete:#ef4444;/* red   */
   --m-ws:#06b6d4;    /* cyan  */
 }
-:/* === Scheme overrides for HTTP/WS palettes === */
+/* === Scheme overrides for HTTP/WS palettes === */
 
 :root[data-scheme="android"]{
   /* Android Studio style */
@@ -858,7 +1258,432 @@ body.hide-col-actions #logtbl .col-actions{display:none}
 .tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
 .tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
 
-:/* ===== Color URL/Summary & Time columns ===== */
+/* ===== Color URL/Summary & Time columns ===== */
+/* Color by LOG level (for logger rows) */
+.tbl tbody tr.level-VERBOSE .col-time,
+.tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   .col-time,
+.tbl tbody tr.level-DEBUG   .col-url { color: var(--lv-d); }
+.tbl tbody tr.level-INFO    .col-time,
+.tbl tbody tr.level-INFO    .col-url { color: var(--lv-i); }
+.tbl tbody tr.level-WARN    .col-time,
+.tbl tbody tr.level-WARN    .col-url { color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   .col-time,
+.tbl tbody tr.level-ERROR   .col-url { color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  .col-time,
+.tbl tbody tr.level-ASSERT  .col-url { color: var(--lv-a); }
+
+/* Color by HTTP status class (for network rows) */
+.tbl tbody tr.status-2xx .col-time, .tbl tbody tr.status-2xx .col-url .url { color: var(--st-2xx); }
+.tbl tbody tr.status-3xx .col-time, .tbl tbody tr.status-3xx .col-url .url { color: var(--st-3xx); }
+.tbl tbody tr.status-4xx .col-time, .tbl tbody tr.status-4xx .col-url .url { color: var(--st-4xx); }
+.tbl tbody tr.status-5xx .col-time, .tbl tbody tr.status-5xx .col-url .url { color: var(--st-5xx); }
+
+/* ===== Make all table column values colorful by row context ===== */
+/* Logger rows: color all cells by level */
+.tbl tbody tr.level-VERBOSE td:not(.col-actions){ color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   td:not(.col-actions){ color: var(--lv-d); }
+.tbl tbody tr.level-INFO    td:not(.col-actions){ color: var(--lv-i); }
+.tbl tbody tr.level-WARN    td:not(.col-actions){ color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   td:not(.col-actions){ color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  td:not(.col-actions){ color: var(--lv-a); }
+
+/* HTTP rows: color all cells by status class */
+:root{ --st-2xx:#22c55e; --st-3xx:#fbbf24; --st-4xx:#fca5a5; --st-5xx:#fb7185; }
+.tbl tbody tr.status-2xx td:not(.col-actions){ color: var(--st-2xx); }
+.tbl tbody tr.status-3xx td:not(.col-actions){ color: var(--st-3xx); }
+.tbl tbody tr.status-4xx td:not(.col-actions){ color: var(--st-4xx); }
+.tbl tbody tr.status-5xx td:not(.col-actions){ color: var(--st-5xx); }
+
+/* Keep chips, icons and code readable (don’t inherit the tint) */
+.tbl tbody tr td .muted,
+.tbl tbody tr td .badge,
+.tbl tbody tr td .material-symbols-outlined,
+.tbl tbody tr td pre.code{ color: inherit; opacity: 0.95; }
+:root{
+  /* default scheme = android */
+  --lv-v:#9E9E9E; /* VERBOSE */
+  --lv-d:#2196F3; /* DEBUG   */
+  --lv-i:#4CAF50; /* INFO    */
+  --lv-w:#FFC107; /* WARN    */
+  --lv-e:#F44336; /* ERROR   */
+  --lv-a:#9C27B0; /* ASSERT  */
+}
+:root[data-scheme="android"]{ /* Android Studio */
+  --lv-v:#9E9E9E; --lv-d:#2196F3; --lv-i:#4CAF50; --lv-w:#FFC107; --lv-e:#F44336; --lv-a:#9C27B0;
+}
+:root[data-scheme="xcode"]{ /* Xcode inspired */
+  --lv-v:#8E8E93; --lv-d:#0A84FF; --lv-i:#34C759; --lv-w:#FF9F0A; --lv-e:#FF453A; --lv-a:#BF5AF2;
+}
+:root[data-scheme="vscode"]{ /* VS Code */
+  --lv-v:#808080; --lv-d:#4FC1FF; --lv-i:#89D185; --lv-w:#CCA700; --lv-e:#F14C4C; --lv-a:#C586C0;
+}
+:root[data-scheme="grafana"]{ /* Grafana */
+  --lv-v:#6b7280; --lv-d:#60a5fa; --lv-i:#22c55e; --lv-w:#f59e0b; --lv-e:#ef4444; --lv-a:#d946ef;
+}
+/* Text color for the Kind column when row has a level */
+.tbl tbody tr.level-VERBOSE .col-kind{ color: var(--lv-v) }
+.tbl tbody tr.level-DEBUG   .col-kind{ color: var(--lv-d) }
+.tbl tbody tr.level-INFO    .col-kind{ color: var(--lv-i) }
+.tbl tbody tr.level-WARN    .col-kind{ color: var(--lv-w) }
+.tbl tbody tr.level-ERROR   .col-kind{ color: var(--lv-e) }
+.tbl tbody tr.level-ASSERT  .col-kind{ color: var(--lv-a) }
+/* Left accent bar tint using current scheme vars */
+.tbl tbody tr.level-VERBOSE{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 55%, transparent) }
+.tbl tbody tr.level-DEBUG  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 55%, transparent) }
+.tbl tbody tr.level-INFO   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 55%, transparent) }
+.tbl tbody tr.level-WARN   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 55%, transparent) }
+.tbl tbody tr.level-ERROR  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 55%, transparent) }
+.tbl tbody tr.level-ASSERT { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 55%, transparent) }
+/* Preserve accent on hover */
+.tbl tbody tr.level-VERBOSE:hover{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 70%, transparent) }
+.tbl tbody tr.level-DEBUG:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 70%, transparent) }
+.tbl tbody tr.level-INFO:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 70%, transparent) }
+.tbl tbody tr.level-WARN:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 70%, transparent) }
+.tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
+.tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
+
+/* ===== Color URL/Summary & Time columns ===== */
+/* Color by LOG level (for logger rows) */
+.tbl tbody tr.level-VERBOSE .col-time,
+.tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   .col-time,
+.tbl tbody tr.level-DEBUG   .col-url { color: var(--lv-d); }
+.tbl tbody tr.level-INFO    .col-time,
+.tbl tbody tr.level-INFO    .col-url { color: var(--lv-i); }
+.tbl tbody tr.level-WARN    .col-time,
+.tbl tbody tr.level-WARN    .col-url { color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   .col-time,
+.tbl tbody tr.level-ERROR   .col-url { color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  .col-time,
+.tbl tbody tr.level-ASSERT  .col-url { color: var(--lv-a); }
+
+/* Color by HTTP status class (for network rows) */
+.tbl tbody tr.status-2xx .col-time, .tbl tbody tr.status-2xx .col-url .url { color: var(--st-2xx); }
+.tbl tbody tr.status-3xx .col-time, .tbl tbody tr.status-3xx .col-url .url { color: var(--st-3xx); }
+.tbl tbody tr.status-4xx .col-time, .tbl tbody tr.status-4xx .col-url .url { color: var(--st-4xx); }
+.tbl tbody tr.status-5xx .col-time, .tbl tbody tr.status-5xx .col-url .url { color: var(--st-5xx); }
+
+/* ===== Make all table column values colorful by row context ===== */
+/* Logger rows: color all cells by level */
+.tbl tbody tr.level-VERBOSE td:not(.col-actions){ color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   td:not(.col-actions){ color: var(--lv-d); }
+.tbl tbody tr.level-INFO    td:not(.col-actions){ color: var(--lv-i); }
+.tbl tbody tr.level-WARN    td:not(.col-actions){ color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   td:not(.col-actions){ color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  td:not(.col-actions){ color: var(--lv-a); }
+
+/* HTTP rows: color all cells by status class */
+:root{ --st-2xx:#22c55e; --st-3xx:#fbbf24; --st-4xx:#fca5a5; --st-5xx:#fb7185; }
+.tbl tbody tr.status-2xx td:not(.col-actions){ color: var(--st-2xx); }
+.tbl tbody tr.status-3xx td:not(.col-actions){ color: var(--st-3xx); }
+.tbl tbody tr.status-4xx td:not(.col-actions){ color: var(--st-4xx); }
+.tbl tbody tr.status-5xx td:not(.col-actions){ color: var(--st-5xx); }
+
+/* Keep chips, icons and code readable (don’t inherit the tint) */
+.tbl tbody tr td .muted,
+.tbl tbody tr td .badge,
+.tbl tbody tr td .material-symbols-outlined,
+.tbl tbody tr td pre.code{ color: inherit; opacity: 0.95; }
+:root{
+  /* default scheme = android */
+  --lv-v:#9E9E9E; /* VERBOSE */
+  --lv-d:#2196F3; /* DEBUG   */
+  --lv-i:#4CAF50; /* INFO    */
+  --lv-w:#FFC107; /* WARN    */
+  --lv-e:#F44336; /* ERROR   */
+  --lv-a:#9C27B0; /* ASSERT  */
+}
+:root[data-scheme="android"]{ /* Android Studio */
+  --lv-v:#9E9E9E; --lv-d:#2196F3; --lv-i:#4CAF50; --lv-w:#FFC107; --lv-e:#F44336; --lv-a:#9C27B0;
+}
+:root[data-scheme="xcode"]{ /* Xcode inspired */
+  --lv-v:#8E8E93; --lv-d:#0A84FF; --lv-i:#34C759; --lv-w:#FF9F0A; --lv-e:#FF453A; --lv-a:#BF5AF2;
+}
+:root[data-scheme="vscode"]{ /* VS Code */
+  --lv-v:#808080; --lv-d:#4FC1FF; --lv-i:#89D185; --lv-w:#CCA700; --lv-e:#F14C4C; --lv-a:#C586C0;
+}
+:root[data-scheme="grafana"]{ /* Grafana */
+  --lv-v:#6b7280; --lv-d:#60a5fa; --lv-i:#22c55e; --lv-w:#f59e0b; --lv-e:#ef4444; --lv-a:#d946ef;
+}
+/* Text color for the Kind column when row has a level */
+.tbl tbody tr.level-VERBOSE .col-kind{ color: var(--lv-v) }
+.tbl tbody tr.level-DEBUG   .col-kind{ color: var(--lv-d) }
+.tbl tbody tr.level-INFO    .col-kind{ color: var(--lv-i) }
+.tbl tbody tr.level-WARN    .col-kind{ color: var(--lv-w) }
+.tbl tbody tr.level-ERROR   .col-kind{ color: var(--lv-e) }
+.tbl tbody tr.level-ASSERT  .col-kind{ color: var(--lv-a) }
+/* Left accent bar tint using current scheme vars */
+.tbl tbody tr.level-VERBOSE{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 55%, transparent) }
+.tbl tbody tr.level-DEBUG  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 55%, transparent) }
+.tbl tbody tr.level-INFO   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 55%, transparent) }
+.tbl tbody tr.level-WARN   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 55%, transparent) }
+.tbl tbody tr.level-ERROR  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 55%, transparent) }
+.tbl tbody tr.level-ASSERT { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 55%, transparent) }
+/* Preserve accent on hover */
+.tbl tbody tr.level-VERBOSE:hover{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 70%, transparent) }
+.tbl tbody tr.level-DEBUG:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 70%, transparent) }
+.tbl tbody tr.level-INFO:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 70%, transparent) }
+.tbl tbody tr.level-WARN:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 70%, transparent) }
+.tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
+.tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
+
+/* ===== Color URL/Summary & Time columns ===== */
+/* Color by LOG level (for logger rows) */
+.tbl tbody tr.level-VERBOSE .col-time,
+.tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   .col-time,
+.tbl tbody tr.level-DEBUG   .col-url { color: var(--lv-d); }
+.tbl tbody tr.level-INFO    .col-time,
+.tbl tbody tr.level-INFO    .col-url { color: var(--lv-i); }
+.tbl tbody tr.level-WARN    .col-time,
+.tbl tbody tr.level-WARN    .col-url { color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   .col-time,
+.tbl tbody tr.level-ERROR   .col-url { color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  .col-time,
+.tbl tbody tr.level-ASSERT  .col-url { color: var(--lv-a); }
+
+/* Color by HTTP status class (for network rows) */
+.tbl tbody tr.status-2xx .col-time, .tbl tbody tr.status-2xx .col-url .url { color: var(--st-2xx); }
+.tbl tbody tr.status-3xx .col-time, .tbl tbody tr.status-3xx .col-url .url { color: var(--st-3xx); }
+.tbl tbody tr.status-4xx .col-time, .tbl tbody tr.status-4xx .col-url .url { color: var(--st-4xx); }
+.tbl tbody tr.status-5xx .col-time, .tbl tbody tr.status-5xx .col-url .url { color: var(--st-5xx); }
+
+/* ===== Make all table column values colorful by row context ===== */
+/* Logger rows: color all cells by level */
+.tbl tbody tr.level-VERBOSE td:not(.col-actions){ color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   td:not(.col-actions){ color: var(--lv-d); }
+.tbl tbody tr.level-INFO    td:not(.col-actions){ color: var(--lv-i); }
+.tbl tbody tr.level-WARN    td:not(.col-actions){ color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   td:not(.col-actions){ color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  td:not(.col-actions){ color: var(--lv-a); }
+
+/* HTTP rows: color all cells by status class */
+:root{ --st-2xx:#22c55e; --st-3xx:#fbbf24; --st-4xx:#fca5a5; --st-5xx:#fb7185; }
+.tbl tbody tr.status-2xx td:not(.col-actions){ color: var(--st-2xx); }
+.tbl tbody tr.status-3xx td:not(.col-actions){ color: var(--st-3xx); }
+.tbl tbody tr.status-4xx td:not(.col-actions){ color: var(--st-4xx); }
+.tbl tbody tr.status-5xx td:not(.col-actions){ color: var(--st-5xx); }
+
+/* Keep chips, icons and code readable (don’t inherit the tint) */
+.tbl tbody tr td .muted,
+.tbl tbody tr td .badge,
+.tbl tbody tr td .material-symbols-outlined,
+.tbl tbody tr td pre.code{ color: inherit; opacity: 0.95; }
+:root{
+  /* default scheme = android */
+  --lv-v:#9E9E9E; /* VERBOSE */
+  --lv-d:#2196F3; /* DEBUG   */
+  --lv-i:#4CAF50; /* INFO    */
+  --lv-w:#FFC107; /* WARN    */
+  --lv-e:#F44336; /* ERROR   */
+  --lv-a:#9C27B0; /* ASSERT  */
+}
+:root[data-scheme="android"]{ /* Android Studio */
+  --lv-v:#9E9E9E; --lv-d:#2196F3; --lv-i:#4CAF50; --lv-w:#FFC107; --lv-e:#F44336; --lv-a:#9C27B0;
+}
+:root[data-scheme="xcode"]{ /* Xcode inspired */
+  --lv-v:#8E8E93; --lv-d:#0A84FF; --lv-i:#34C759; --lv-w:#FF9F0A; --lv-e:#FF453A; --lv-a:#BF5AF2;
+}
+:root[data-scheme="vscode"]{ /* VS Code */
+  --lv-v:#808080; --lv-d:#4FC1FF; --lv-i:#89D185; --lv-w:#CCA700; --lv-e:#F14C4C; --lv-a:#C586C0;
+}
+:root[data-scheme="grafana"]{ /* Grafana */
+  --lv-v:#6b7280; --lv-d:#60a5fa; --lv-i:#22c55e; --lv-w:#f59e0b; --lv-e:#ef4444; --lv-a:#d946ef;
+}
+/* Text color for the Kind column when row has a level */
+.tbl tbody tr.level-VERBOSE .col-kind{ color: var(--lv-v) }
+.tbl tbody tr.level-DEBUG   .col-kind{ color: var(--lv-d) }
+.tbl tbody tr.level-INFO    .col-kind{ color: var(--lv-i) }
+.tbl tbody tr.level-WARN    .col-kind{ color: var(--lv-w) }
+.tbl tbody tr.level-ERROR   .col-kind{ color: var(--lv-e) }
+.tbl tbody tr.level-ASSERT  .col-kind{ color: var(--lv-a) }
+/* Left accent bar tint using current scheme vars */
+.tbl tbody tr.level-VERBOSE{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 55%, transparent) }
+.tbl tbody tr.level-DEBUG  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 55%, transparent) }
+.tbl tbody tr.level-INFO   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 55%, transparent) }
+.tbl tbody tr.level-WARN   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 55%, transparent) }
+.tbl tbody tr.level-ERROR  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 55%, transparent) }
+.tbl tbody tr.level-ASSERT { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 55%, transparent) }
+/* Preserve accent on hover */
+.tbl tbody tr.level-VERBOSE:hover{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 70%, transparent) }
+.tbl tbody tr.level-DEBUG:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 70%, transparent) }
+.tbl tbody tr.level-INFO:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 70%, transparent) }
+.tbl tbody tr.level-WARN:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 70%, transparent) }
+.tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
+.tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
+
+/* ===== Color URL/Summary & Time columns ===== */
+/* Color by LOG level (for logger rows) */
+.tbl tbody tr.level-VERBOSE .col-time,
+.tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   .col-time,
+.tbl tbody tr.level-DEBUG   .col-url { color: var(--lv-d); }
+.tbl tbody tr.level-INFO    .col-time,
+.tbl tbody tr.level-INFO    .col-url { color: var(--lv-i); }
+.tbl tbody tr.level-WARN    .col-time,
+.tbl tbody tr.level-WARN    .col-url { color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   .col-time,
+.tbl tbody tr.level-ERROR   .col-url { color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  .col-time,
+.tbl tbody tr.level-ASSERT  .col-url { color: var(--lv-a); }
+
+/* Color by HTTP status class (for network rows) */
+.tbl tbody tr.status-2xx .col-time, .tbl tbody tr.status-2xx .col-url .url { color: var(--st-2xx); }
+.tbl tbody tr.status-3xx .col-time, .tbl tbody tr.status-3xx .col-url .url { color: var(--st-3xx); }
+.tbl tbody tr.status-4xx .col-time, .tbl tbody tr.status-4xx .col-url .url { color: var(--st-4xx); }
+.tbl tbody tr.status-5xx .col-time, .tbl tbody tr.status-5xx .col-url .url { color: var(--st-5xx); }
+
+/* ===== Make all table column values colorful by row context ===== */
+/* Logger rows: color all cells by level */
+.tbl tbody tr.level-VERBOSE td:not(.col-actions){ color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   td:not(.col-actions){ color: var(--lv-d); }
+.tbl tbody tr.level-INFO    td:not(.col-actions){ color: var(--lv-i); }
+.tbl tbody tr.level-WARN    td:not(.col-actions){ color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   td:not(.col-actions){ color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  td:not(.col-actions){ color: var(--lv-a); }
+
+/* HTTP rows: color all cells by status class */
+:root{ --st-2xx:#22c55e; --st-3xx:#fbbf24; --st-4xx:#fca5a5; --st-5xx:#fb7185; }
+.tbl tbody tr.status-2xx td:not(.col-actions){ color: var(--st-2xx); }
+.tbl tbody tr.status-3xx td:not(.col-actions){ color: var(--st-3xx); }
+.tbl tbody tr.status-4xx td:not(.col-actions){ color: var(--st-4xx); }
+.tbl tbody tr.status-5xx td:not(.col-actions){ color: var(--st-5xx); }
+
+/* Keep chips, icons and code readable (don’t inherit the tint) */
+.tbl tbody tr td .muted,
+.tbl tbody tr td .badge,
+.tbl tbody tr td .material-symbols-outlined,
+.tbl tbody tr td pre.code{ color: inherit; opacity: 0.95; }
+:root{
+  /* default scheme = android */
+  --lv-v:#9E9E9E; /* VERBOSE */
+  --lv-d:#2196F3; /* DEBUG   */
+  --lv-i:#4CAF50; /* INFO    */
+  --lv-w:#FFC107; /* WARN    */
+  --lv-e:#F44336; /* ERROR   */
+  --lv-a:#9C27B0; /* ASSERT  */
+}
+:root[data-scheme="android"]{ /* Android Studio */
+  --lv-v:#9E9E9E; --lv-d:#2196F3; --lv-i:#4CAF50; --lv-w:#FFC107; --lv-e:#F44336; --lv-a:#9C27B0;
+}
+:root[data-scheme="xcode"]{ /* Xcode inspired */
+  --lv-v:#8E8E93; --lv-d:#0A84FF; --lv-i:#34C759; --lv-w:#FF9F0A; --lv-e:#FF453A; --lv-a:#BF5AF2;
+}
+:root[data-scheme="vscode"]{ /* VS Code */
+  --lv-v:#808080; --lv-d:#4FC1FF; --lv-i:#89D185; --lv-w:#CCA700; --lv-e:#F14C4C; --lv-a:#C586C0;
+}
+:root[data-scheme="grafana"]{ /* Grafana */
+  --lv-v:#6b7280; --lv-d:#60a5fa; --lv-i:#22c55e; --lv-w:#f59e0b; --lv-e:#ef4444; --lv-a:#d946ef;
+}
+/* Text color for the Kind column when row has a level */
+.tbl tbody tr.level-VERBOSE .col-kind{ color: var(--lv-v) }
+.tbl tbody tr.level-DEBUG   .col-kind{ color: var(--lv-d) }
+.tbl tbody tr.level-INFO    .col-kind{ color: var(--lv-i) }
+.tbl tbody tr.level-WARN    .col-kind{ color: var(--lv-w) }
+.tbl tbody tr.level-ERROR   .col-kind{ color: var(--lv-e) }
+.tbl tbody tr.level-ASSERT  .col-kind{ color: var(--lv-a) }
+/* Left accent bar tint using current scheme vars */
+.tbl tbody tr.level-VERBOSE{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 55%, transparent) }
+.tbl tbody tr.level-DEBUG  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 55%, transparent) }
+.tbl tbody tr.level-INFO   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 55%, transparent) }
+.tbl tbody tr.level-WARN   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 55%, transparent) }
+.tbl tbody tr.level-ERROR  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 55%, transparent) }
+.tbl tbody tr.level-ASSERT { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 55%, transparent) }
+/* Preserve accent on hover */
+.tbl tbody tr.level-VERBOSE:hover{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 70%, transparent) }
+.tbl tbody tr.level-DEBUG:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 70%, transparent) }
+.tbl tbody tr.level-INFO:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 70%, transparent) }
+.tbl tbody tr.level-WARN:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 70%, transparent) }
+.tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
+.tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
+
+/* ===== Color URL/Summary & Time columns ===== */
+/* Color by LOG level (for logger rows) */
+.tbl tbody tr.level-VERBOSE .col-time,
+.tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   .col-time,
+.tbl tbody tr.level-DEBUG   .col-url { color: var(--lv-d); }
+.tbl tbody tr.level-INFO    .col-time,
+.tbl tbody tr.level-INFO    .col-url { color: var(--lv-i); }
+.tbl tbody tr.level-WARN    .col-time,
+.tbl tbody tr.level-WARN    .col-url { color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   .col-time,
+.tbl tbody tr.level-ERROR   .col-url { color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  .col-time,
+.tbl tbody tr.level-ASSERT  .col-url { color: var(--lv-a); }
+
+/* Color by HTTP status class (for network rows) */
+.tbl tbody tr.status-2xx .col-time, .tbl tbody tr.status-2xx .col-url .url { color: var(--st-2xx); }
+.tbl tbody tr.status-3xx .col-time, .tbl tbody tr.status-3xx .col-url .url { color: var(--st-3xx); }
+.tbl tbody tr.status-4xx .col-time, .tbl tbody tr.status-4xx .col-url .url { color: var(--st-4xx); }
+.tbl tbody tr.status-5xx .col-time, .tbl tbody tr.status-5xx .col-url .url { color: var(--st-5xx); }
+
+/* ===== Make all table column values colorful by row context ===== */
+/* Logger rows: color all cells by level */
+.tbl tbody tr.level-VERBOSE td:not(.col-actions){ color: var(--lv-v); }
+.tbl tbody tr.level-DEBUG   td:not(.col-actions){ color: var(--lv-d); }
+.tbl tbody tr.level-INFO    td:not(.col-actions){ color: var(--lv-i); }
+.tbl tbody tr.level-WARN    td:not(.col-actions){ color: var(--lv-w); }
+.tbl tbody tr.level-ERROR   td:not(.col-actions){ color: var(--lv-e); }
+.tbl tbody tr.level-ASSERT  td:not(.col-actions){ color: var(--lv-a); }
+
+/* HTTP rows: color all cells by status class */
+:root{ --st-2xx:#22c55e; --st-3xx:#fbbf24; --st-4xx:#fca5a5; --st-5xx:#fb7185; }
+.tbl tbody tr.status-2xx td:not(.col-actions){ color: var(--st-2xx); }
+.tbl tbody tr.status-3xx td:not(.col-actions){ color: var(--st-3xx); }
+.tbl tbody tr.status-4xx td:not(.col-actions){ color: var(--st-4xx); }
+.tbl tbody tr.status-5xx td:not(.col-actions){ color: var(--st-5xx); }
+
+/* Keep chips, icons and code readable (don’t inherit the tint) */
+.tbl tbody tr td .muted,
+.tbl tbody tr td .badge,
+.tbl tbody tr td .material-symbols-outlined,
+.tbl tbody tr td pre.code{ color: inherit; opacity: 0.95; }
+:root{
+  /* default scheme = android */
+  --lv-v:#9E9E9E; /* VERBOSE */
+  --lv-d:#2196F3; /* DEBUG   */
+  --lv-i:#4CAF50; /* INFO    */
+  --lv-w:#FFC107; /* WARN    */
+  --lv-e:#F44336; /* ERROR   */
+  --lv-a:#9C27B0; /* ASSERT  */
+}
+:root[data-scheme="android"]{ /* Android Studio */
+  --lv-v:#9E9E9E; --lv-d:#2196F3; --lv-i:#4CAF50; --lv-w:#FFC107; --lv-e:#F44336; --lv-a:#9C27B0;
+}
+:root[data-scheme="xcode"]{ /* Xcode inspired */
+  --lv-v:#8E8E93; --lv-d:#0A84FF; --lv-i:#34C759; --lv-w:#FF9F0A; --lv-e:#FF453A; --lv-a:#BF5AF2;
+}
+:root[data-scheme="vscode"]{ /* VS Code */
+  --lv-v:#808080; --lv-d:#4FC1FF; --lv-i:#89D185; --lv-w:#CCA700; --lv-e:#F14C4C; --lv-a:#C586C0;
+}
+:root[data-scheme="grafana"]{ /* Grafana */
+  --lv-v:#6b7280; --lv-d:#60a5fa; --lv-i:#22c55e; --lv-w:#f59e0b; --lv-e:#ef4444; --lv-a:#d946ef;
+}
+/* Text color for the Kind column when row has a level */
+.tbl tbody tr.level-VERBOSE .col-kind{ color: var(--lv-v) }
+.tbl tbody tr.level-DEBUG   .col-kind{ color: var(--lv-d) }
+.tbl tbody tr.level-INFO    .col-kind{ color: var(--lv-i) }
+.tbl tbody tr.level-WARN    .col-kind{ color: var(--lv-w) }
+.tbl tbody tr.level-ERROR   .col-kind{ color: var(--lv-e) }
+.tbl tbody tr.level-ASSERT  .col-kind{ color: var(--lv-a) }
+/* Left accent bar tint using current scheme vars */
+.tbl tbody tr.level-VERBOSE{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 55%, transparent) }
+.tbl tbody tr.level-DEBUG  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 55%, transparent) }
+.tbl tbody tr.level-INFO   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 55%, transparent) }
+.tbl tbody tr.level-WARN   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 55%, transparent) }
+.tbl tbody tr.level-ERROR  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 55%, transparent) }
+.tbl tbody tr.level-ASSERT { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 55%, transparent) }
+/* Preserve accent on hover */
+.tbl tbody tr.level-VERBOSE:hover{ box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-v) 70%, transparent) }
+.tbl tbody tr.level-DEBUG:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-d) 70%, transparent) }
+.tbl tbody tr.level-INFO:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-i) 70%, transparent) }
+.tbl tbody tr.level-WARN:hover   { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-w) 70%, transparent) }
+.tbl tbody tr.level-ERROR:hover  { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-e) 70%, transparent) }
+.tbl tbody tr.level-ASSERT:hover { box-shadow: inset 4px 0 0 color-mix(in srgb, var(--lv-a) 70%, transparent) }
+
+/* ===== Color URL/Summary & Time columns ===== */
 /* Color by LOG level (for logger rows) */
 .tbl tbody tr.level-VERBOSE .col-time,
 .tbl tbody tr.level-VERBOSE .col-url { color: var(--lv-v); }
@@ -1130,8 +1955,35 @@ body.mode-log .col-url .lc{display:block}
 .muted{color:var(--muted)} .badge{border:1px solid var(--line);border-radius:6px;padding:2px 6px;background:transparent;font:12px ui-monospace,Menlo,monospace}
 .hidden{display:none !important}
 
+
 /* Material Symbols font setup */
 .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+
+/* Align Settings button icon + text nicely */
+#settingsBtn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  line-height:1;
+}
+
+/* Keep icon centered to the text baseline */
+#settingsBtn .material-symbols-outlined{
+  display:inline-block;
+  line-height:1;
+  font-size:20px;       /* match table icon size */
+  transform: translateY(1px); /* tiny optical nudge */
+}
+
+/* Make all .btn & .icon controls align contents consistently */
+.btn,
+.icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  line-height:1;
+}
 
 /* Theme toggle icon visibility (default: hide both, then show correct for theme) */
 #themeToggle .ico-sun,
@@ -1153,12 +2005,169 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
 .tbl thead th{ padding: calc(var(--row-pad) - 4px) 8px; }
 .tbl tbody td{ padding: calc(var(--row-pad) - 6px) 6px; }
 
-/* Buttons compactness varies subtly per scheme */
-.btn{ padding: calc(var(--row-pad) - 6px) 16px; }
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding: calc(var(--row-pad) - 6px) 16px;
+  line-height:1;
+}
 .btn.xs{ padding: calc(var(--row-pad) - 8px) 10px; }
 
 /* Chips reflect scheme corners */
 .chip{ border-radius: var(--chip-radius); }
+
+/* ===== Panels (Settings & Filters) — unified visual ===== */
+#settingsPanel, #filtersPanel{
+  position: fixed;
+  z-index: 70;
+  right: 12px;
+  top: 64px; /* default; JS may reposition under each button */
+  width: min(520px, calc(100vw - 24px));
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
+  overflow: hidden;
+  backdrop-filter: saturate(120%) blur(6px);
+}
+#settingsPanel.hidden, #filtersPanel.hidden{ display:none !important; }
+
+/* Heads */
+#settingsPanel .sp-head, #filtersPanel .fp-head{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-bottom:1px solid var(--line);
+  background: color-mix(in srgb, var(--md-sys-color-surface) 85%, transparent);
+  justify-content: space-between;
+}
+#settingsPanel .sp-head .sp-icon, #filtersPanel .fp-head .fp-icon{
+  width:28px; height:28px; border-radius:8px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  flex:0 0 auto;
+}
+#settingsPanel .sp-head .sp-title, #filtersPanel .fp-head .fp-title{
+  font-weight:700; font-size:14px; letter-spacing:.2px;
+}
+/* Close button pinned to the far right */
+#settingsPanel .sp-head #settingsClose{ margin-left:auto; }
+#filtersPanel .fp-head #filtersClose{ margin-left:auto; }
+
+/* Bodies */
+#settingsPanel .sp-body, #filtersPanel .fp-body{
+  padding:12px 14px;
+  display:grid; gap:14px;
+}
+#settingsPanel .sp-section, #filtersPanel .fp-section{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background: var(--md-sys-color-surface-container);
+  padding:12px;
+}
+#settingsPanel .sp-section h4, #filtersPanel .fp-section h4{
+  margin:0 0 8px; font-size:13px; color: var(--md-sys-color-primary);
+}
+
+/* Columns section as responsive grid */
+#settingsPanel .sp-section.cols-grid, #filtersPanel .fp-section.cols-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap:10px 12px;
+  align-items:center;
+}
+#settingsPanel .sp-section.cols-grid h4, #filtersPanel .fp-section.cols-grid h4{
+  grid-column: 1 / -1;
+  margin-bottom: 6px;
+}
+#settingsPanel .sp-section.cols-grid .fp-checkbox,
+#filtersPanel .fp-section.cols-grid .fp-checkbox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background: var(--md-sys-color-surface);
+  cursor:pointer;
+  user-select:none;
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+#settingsPanel .sp-section.cols-grid .fp-checkbox:hover,
+#filtersPanel .fp-section.cols-grid .fp-checkbox:hover{
+  border-color: color-mix(in srgb, var(--md-sys-color-primary) 35%, var(--line));
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+}
+#settingsPanel .sp-section.cols-grid .fp-checkbox input,
+#filtersPanel .fp-section.cols-grid .fp-checkbox input{ margin:0; }
+#settingsPanel .sp-section.cols-grid .fp-checkbox .lbl,
+#filtersPanel .fp-section.cols-grid .fp-checkbox .lbl{ line-height:1.2; }
+
+/* Row helper (label + control) */
+#settingsPanel .sp-row, #filtersPanel .fp-row{
+  display:grid; grid-template-columns: 1fr auto; align-items:center;
+  gap:8px; padding:8px 0;
+}
+#settingsPanel .sp-row + .sp-row{ border-top:1px dashed var(--line); }
+#filtersPanel  .fp-row + .fp-row{ border-top:1px dashed var(--line); }
+
+/* Segmented controls */
+#settingsPanel .seg, #filtersPanel .seg{
+  display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+}
+#settingsPanel .seg button, #filtersPanel .seg button{
+  background:transparent; border:0; padding:8px 10px; font-size:12px; cursor:pointer;
+  color: var(--md-sys-color-on-surface);
+}
+#settingsPanel .seg button[aria-pressed="true"],
+#filtersPanel .seg button[aria-pressed="true"]{
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+#settingsPanel .seg button + button, #filtersPanel .seg button + button{ border-left:1px solid var(--line); }
+
+/* Switches */
+#settingsPanel .switch, #filtersPanel .switch{
+  --sw-w:46px; --sw-h:26px;
+  position:relative; width:var(--sw-w); height:var(--sw-h);
+}
+#settingsPanel .switch input, #filtersPanel .switch input{ position:absolute; inset:0; opacity:0; }
+#settingsPanel .switch .track, #filtersPanel .switch .track{
+  position:absolute; inset:0; border-radius:999px;
+  background: color-mix(in srgb, var(--md-sys-color-outline-variant) 60%, transparent);
+  transition: background .15s ease;
+}
+#settingsPanel .switch .thumb, #filtersPanel .switch .thumb{
+  position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
+  background: var(--md-sys-color-surface);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35);
+  transition: transform .15s ease;
+}
+#settingsPanel .switch input:checked + .track, #filtersPanel .switch input:checked + .track{ background: var(--md-sys-color-primary); }
+#settingsPanel .switch input:checked + .track + .thumb,
+#filtersPanel .switch input:checked + .track + .thumb{ transform: translateX(20px); }
+
+/* Footers */
+#settingsPanel .sp-foot, #filtersPanel .fp-foot{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:10px; padding:10px 14px; border-top:1px solid var(--line);
+  background: color-mix(in srgb, var(--md-sys-color-surface) 90%, transparent);
+}
+#settingsPanel .sp-foot .hint, #filtersPanel .fp-foot .hint{
+  color: var(--muted); font-size:12px;
+}
+#settingsPanel .sp-foot .btn-reset, #filtersPanel .fp-foot .btn-reset{
+  background: transparent; color: var(--md-sys-color-primary);
+  border:1px dashed var(--md-sys-color-primary);
+  padding:6px 10px; border-radius:8px; cursor:pointer;
+}
+#settingsPanel .sp-foot .btn-close, #filtersPanel .fp-foot .btn-close{
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border:0; padding:8px 12px; border-radius:10px; cursor:pointer;
+}
 
 /* Responsive */
 @media (max-width:1024px){ .tbl thead th,.tbl tbody td{padding:10px} .col-actions{width:140px} }
@@ -1170,6 +2179,13 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
   #logtbl thead .col-status, #logtbl tbody .col-status{ display:none }
   /* Make URL/Summary breathe */
   .col-url{ width:auto }
+  #settingsPanel, #filtersPanel{
+    right: 12px; left: 12px; width:auto; top: 88px;
+  }
+  #settingsPanel .sp-section.cols-grid,
+  #filtersPanel  .fp-section.cols-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (max-width:768px){
   .tbl{ font-size:13px }
@@ -1320,10 +2336,17 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
         // ---- Preferences ----
         function initPrefs(){
           try{
+            // Pretty JSON
             const v = localStorage.getItem('logtap:jsonPretty');
             if(jsonPretty){
               if(v!==null){ jsonPretty.checked = (v === '1'); }
               else { jsonPretty.checked = true; } // default enabled
+            }
+            // Auto-scroll
+            const av = localStorage.getItem('logtap:autoScroll');
+            if (autoScroll){
+              if(av!==null){ autoScroll.checked = (av === '1'); }
+              else { autoScroll.checked = true; } // default ON
             }
           }catch{}
         }
@@ -1468,22 +2491,6 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
           if(statusCodeFilter) statusCodeFilter.value='';
           if(levelFilter) levelFilter.value='';
           if(viewMode){ viewMode.value='mix'; applyMode(); }
-
-          // Pretty JSON defaults to ON
-          if(jsonPretty){
-            jsonPretty.checked = true;
-            try{ localStorage.setItem('logtap:jsonPretty','1'); }catch{}
-          }
-
-          // Columns: show all
-          const allTrue = {id:true,time:true,kind:true,tag:true,method:true,status:true,url:true,actions:true};
-          try{ localStorage.setItem('logtap:cols', JSON.stringify(allTrue)); }catch{}
-          applyCols(allTrue);
-
-          // Clear active stat chip highlight
-          highlightChip(null);
-          // Reset column widths to defaults
-          resetColWidths();
         }
         // ==== Column Resize (persisted) ====
         const COL_W_KEY = 'logtap:colW';
@@ -1812,17 +2819,21 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
             `<td class="col-id">${ev.id ?? ''}</td>`+
             `<td class="col-time">${fmtTime(ev.ts)}</td>`+
             `<td class="col-kind kind-${kind}">${
-              kind==='LOG'
-                ? escapeHtml(ev.level || levelOf(ev) || 'LOG')
-                : (kind==='WEBSOCKET' ? ('WS'+wsIconHtml) : kind)
-            }</td>`+
+        kind === 'LOG'
+        ? escapeHtml(ev.level || levelOf(ev) || 'LOG')
+        : (kind === 'WEBSOCKET' ? ('WS' + wsIconHtml) : kind)
+    }</td>`+
             `<td class="col-tag">${escapeHtml(tagTxt)}</td>`+
-            `<td class="col-method method-${mU}">${escapeHtml(ev.method || (kind==='WEBSOCKET'?'WS':''))}</td>`+
+            `<td class="col-method method-${mU}">${escapeHtml(ev.method || (kind === 'WEBSOCKET'?'WS':''))}</td>`+
             `<td class="col-status ${classForStatus(ev.status)}">${ev.status ?? ''}</td>`+
             (kind==='LOG'
               ? (`<td class="col-url"><div class="url"><div class="lc">${logcatLine(ev)}</div></div></td>`)
               : (`<td class="col-url">`
-                   + `<div class="url method-${mU} ${kind==='WEBSOCKET' ? (isSend?'ws ws-send': (isRecv?'ws ws-recv':'ws')) : ''}">${escapeHtml(ev.url || '')}</div>`
+                   + `<div class="url method-${mU} ${kind === 'WEBSOCKET' ? (isSend?'ws ws-send': (isRecv?'ws ws-recv':'ws')) : ''}">${
+        escapeHtml(
+            ev.url || ''
+        )
+    }</div>`
                    + (ev.summary ? `<div class="muted">${escapeHtml(ev.summary)}</div>` : '')
                  + `</td>`)
             )
@@ -2068,6 +3079,9 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
           renderAll();
           if (currentEv) openDrawer(currentEv);
         });
+        autoScroll?.addEventListener('change', ()=>{
+          try{ localStorage.setItem('logtap:autoScroll', autoScroll.checked ? '1' : '0'); }catch{}
+        });
         colorScheme?.addEventListener('change', ()=> applyScheme(colorScheme.value));
         clearBtn?.addEventListener('click', async ()=>{ try{ await fetch('/api/clear', {method:'POST'}); }catch{} rows=[]; renderAll(); });
         drawerClose?.addEventListener('click', ()=> bodyEl.classList.remove('drawer-open'));
@@ -2108,10 +3122,41 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
         themeToggle?.addEventListener('click', ()=>{ const cur = document.documentElement.getAttribute('data-theme') || 'dark'; const next = cur==='dark'?'light':'dark'; applyTheme(next); localStorage.setItem('logtap:theme', next); });
         
         // ---- Bootstrap + WS status ----
+        async function loadDeviceInfo(){
+          try{
+            const res = await fetch('/api/info');
+            if(!res.ok) return;
+            const info = await res.json();
+            const appNameEl = document.getElementById('appName');
+            const appMetaEl = document.getElementById('appMeta');
+            const appIconEl = document.getElementById('appIcon');
+        
+            if(appNameEl) appNameEl.textContent = info.appName || 'Unknown App';
+        
+            if(appMetaEl){
+              const ver = [info.versionName ? 'v'+info.versionName : null,
+                           (info.versionCode!=null) ? '('+info.versionCode+')' : null]
+                          .filter(Boolean).join(' ');
+              const device = [info.deviceManufacturer, info.deviceModel].filter(Boolean).join(' ');
+              const os = [info.osType, info.osVersion, info.apiLevel!=null?('API '+info.apiLevel):null]
+                         .filter(Boolean).join(' ');
+              // Compose meta: bundle • version • device • os
+              appMetaEl.textContent = [info.appBundle, ver, device, os].filter(Boolean).join(' • ');
+            }
+            if(appIconEl && info.appIconBase64){
+              appIconEl.style.backgroundImage = 'url(data:image/png;base64,'+info.appIconBase64+')';
+            }
+          }catch(e){
+            console.warn('[LogTap] Device info load failed', e);
+          }
+        }
+
         async function bootstrap(){
           initTheme();
           initPrefs();
           initScheme();
+          // Load DeviceAppInfo into header
+          loadDeviceInfo();
           try{ const res = await fetch('/api/logs?limit=1000'); if(!res.ok) throw new Error('HTTP '+res.status); rows = await res.json(); }
           catch(err){ console.error('[LogTap] failed to fetch /api/logs', err); rows=[]; }
           applyMode();
@@ -2128,6 +3173,85 @@ body.ui{ font-size: var(--font-size); font-family: var(--font-ui); }
             ws.onmessage = (e)=>{ try{ const ev = JSON.parse(e.data); rows.push(ev); if(matchesFilters(ev)){ tbody.appendChild(renderRow(ev)); if(autoScroll?.checked) tbody.lastElementChild?.scrollIntoView({block:'end'}); renderStats(); } }catch(parseErr){ console.warn('[LogTap] bad WS payload', parseErr); } };
           }catch(wsErr){ console.warn('[LogTap] WS setup failed', wsErr); if(wsStatus){ wsStatus.textContent='● Disconnected'; wsStatus.classList.remove('status-on','status-connecting'); wsStatus.classList.add('status-off'); } }
         }
+        // === Settings popover wiring ===
+        const settingsBtn   = document.getElementById('settingsBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsClose = document.getElementById('settingsClose');
+        const settingsReset = document.getElementById('settingsReset');
+
+        function toggleSettings(open) {
+          if (!settingsPanel || !settingsBtn) return;
+          const willOpen = open ?? settingsPanel.classList.contains('hidden');
+          if (willOpen) {
+            // Position the panel just under the button, keeping it in-viewport
+            const br = settingsBtn.getBoundingClientRect();
+            const vw = window.innerWidth, vh = window.innerHeight;
+            const panelW = Math.min(520, vw - 24);
+            let left = Math.max(12, Math.min(br.left, vw - panelW - 12));
+            let top  = Math.min(br.bottom + 8, vh - 100); // leave a little room at bottom
+            settingsPanel.style.left = left + 'px';
+            settingsPanel.style.right = 'auto';
+            settingsPanel.style.top = top + 'px';
+          }
+          settingsPanel.classList.toggle('hidden', !willOpen);
+          settingsBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        }
+
+        settingsBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleSettings();
+        });
+
+        settingsClose?.addEventListener('click', () => toggleSettings(false));
+        // Optional hook for your reset logic:
+        settingsReset?.addEventListener('click', () => {
+           // Pretty JSON defaults to ON
+          if(jsonPretty){
+            jsonPretty.checked = true;
+            try{ localStorage.setItem('logtap:jsonPretty','1'); }catch{}
+          }
+          if (autoScroll){
+            autoScroll.checked = true;
+            try{ localStorage.setItem('logtap:autoScroll','1'); }catch{}
+          }
+
+          // Columns: show all
+          const allTrue = {id:true,time:true,kind:true,tag:true,method:true,status:true,url:true,actions:false};
+          try{ localStorage.setItem('logtap:cols', JSON.stringify(allTrue)); }catch{}
+          applyCols(allTrue);
+
+          // Clear active stat chip highlight
+          highlightChip(null);
+          // Reset column widths to defaults
+          resetColWidths();
+        });
+        
+        // Close when clicking outside
+        window.addEventListener('click', (e) => {
+          if (!settingsPanel || settingsPanel.classList.contains('hidden')) return;
+          if (!settingsPanel.contains(e.target) && e.target !== settingsBtn && !settingsBtn.contains(e.target)) {
+            toggleSettings(false);
+          }
+        });
+        
+        // Close on Escape
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') toggleSettings(false);
+        });
+
+        // Make the Columns section a grid without touching HTML
+        (function(){
+          try{
+            const secs = document.querySelectorAll('#settingsPanel .sp-section');
+            secs.forEach(sec => {
+              const h = sec.querySelector('h4');
+              if (h && /columns/i.test(h.textContent || '')) {
+                sec.classList.add('cols-grid');
+              }
+            });
+          }catch(e){ console.warn('Columns grid setup failed', e); }
+        })();
+
         // Load saved drawer width and enable drag to resize
         loadDrawerWidth();
         drawerResizer?.addEventListener('mousedown', (e)=>{ e.preventDefault(); startResize(e); });
