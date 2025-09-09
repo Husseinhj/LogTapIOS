@@ -25,7 +25,7 @@ let package = Package(
         .product(name: "NIOTransportServices", package: "swift-nio-transport-services"),
         .product(name: "WebSocketKit", package: "websocket-kit")
       ],
-      path: "Sources/LogTapIOS"
+      path: "LogTapIOS/Sources/LogTapIOS"
     )
   ]
 )
